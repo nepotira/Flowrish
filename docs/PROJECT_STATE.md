@@ -4,12 +4,13 @@
 > **Versão:** 1.2.0 (Claymorphism Soft 3D Harmonizado com WhatsApp)  
 > **Status:** Conforme & Estável  
 > **Repositório Primário:** `nepotira/Flowrish` (independente, não-fork)  
-> **Branch Ativa:** `main` (sincronizada com `origin/main`)  
+> **Branch Ativa:** `test/interactive-3d-book` (em teste isolado da experiência 3D Scrollytelling com Livro Monumental)  
 
 ---
 
 ## 1. Visão Geral da Arquitetura
 - **Frontend**: Vanilla JavaScript (ES Modules nativos sem bundlers), HTML5 semântico, CSS3 com variáveis de design tokens (Claymorphism Soft 3D completo).
+- **Livro 3D Scrollytelling (Branch de Teste)**: Livro monumental em 3D acoplado ao scroll, paleta de couro Havana/Caramelo tostado (`#945738` -> `#592D17`) com filigranas douradas (`#F5E0B7`), capa com a flor floral sem texto, abertura em fresta ("abridinha" ~114°) revelando títulos unitários gigantes (`ANUNCIE`, `ENCONTRE`, `COMBINE`, `AVALIE`, `DESTAQUES`, `FLORESÇA`). Posição 100% ancorada sem arrasto e zero movimento autônomo.
 - **Backend / Persistência**: Firebase Authentication + Cloud Firestore (`biblioteca-76f0c`).
 - **Mecanismo de Troca**: Conexão ágil e descentralizada via WhatsApp (`whatsappUrl`) combinando livros anunciados no acervo.
 - **Avaliações**: Sistema livre de reputação de perfil (`ratings`), permitindo que leitores avaliem uns aos outros após a troca com réplica do dono do perfil.
