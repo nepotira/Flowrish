@@ -158,39 +158,20 @@
             <!-- Fita marcadora de cetim -->
             <div class="book-ribbon"></div>
 
-            <!-- Miolo aberto (páginas internas) -->
-            <div class="book-spread">
-              <!-- Página esquerda -->
-              <div class="book-page-leaf book-page-left">
-                <div class="book-gutter-shadow"></div>
-                <div class="page-ornament">✦ ✦ ✦</div>
-                <div class="page-hero-text">
-                  <span class="page-kicker">COMUNIDADE</span>
-                  <h2 class="page-headline">HISTÓRIAS<br>QUE<br>FLORESCEM.</h2>
-                  <div class="page-accent-line"></div>
-                  <p class="page-subheadline">Troque livros. Conecte pessoas.</p>
-                </div>
-                <div class="page-footer-mark">
-                  <img src="assets/logo-horizontal-marrom.png" alt="" style="height:24px;opacity:0.85;">
-                </div>
-              </div>
-
-              <!-- Página direita (dinâmica sincronizada com o scroll) -->
-              <div class="book-page-leaf book-page-right">
-                <div class="book-gutter-shadow"></div>
-                <div class="page-step-card-dynamic">
-                  <span class="page-big-number" id="pageBigNum">01</span>
-                  <span class="page-big-badge" id="pageBigBadge">PASSO 1</span>
-                  <h2 class="page-big-title" id="pageBigTitle">ANUNCIE</h2>
-                  <p class="page-big-desc" id="pageBigDesc">Cadastre seus livros pelo ISBN com capa e dados automáticos.</p>
-                  <div class="page-big-tag" id="pageBigTag">✦ Rápido & Sem burocracia</div>
-                </div>
+            <!-- Miolo interno: Página única com palavra unitária gigante -->
+            <div class="book-inside-page">
+              <div class="book-gutter-shadow"></div>
+              <div class="book-word-wrap" id="bookWordWrap">
+                <span class="book-word-num" id="bookWordNum">01</span>
+                <h2 class="book-single-word" id="bookSingleWord">ANUNCIE</h2>
+                <div class="book-word-divider"></div>
+                <span class="book-single-sub" id="bookSingleSub">ISBN com capa e dados automáticos</span>
               </div>
             </div>
 
             <!-- Capa frontal interativa (SOMENTE a flor, sem texto) -->
-            <div class="book-front-cover">
-              <!-- Lado externo da capa: pura elegância com a flor 3D -->
+            <div class="book-front-cover" id="bookFrontCover">
+              <!-- Lado externo da capa: flor 3D em relevo, zero texto -->
               <div class="book-cover-face-front">
                 <div class="book-cover-frame"></div>
                 <div class="book-cover-flower-wrap">
@@ -198,11 +179,10 @@
                 </div>
               </div>
 
-              <!-- Lado interno da capa (guarda do livro) -->
+              <!-- Lado interno da capa (visível ao dar a abridinha) -->
               <div class="book-cover-face-back">
-                <div class="book-ex-libris">
-                  <h5>Ex-Líbris Flowrish</h5>
-                  <p>Este volume pertence à comunidade leitora. Role a página para abrir e explorar.</p>
+                <div class="book-inside-lining">
+                  <div class="book-lining-seal">🌸</div>
                 </div>
               </div>
             </div>

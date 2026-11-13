@@ -1,66 +1,66 @@
 /* ============================================================
-   Flowrish — 3D Scrollytelling Book (Versão 2: Grande & Destaque)
-   Cores: Couro Vinho Aveludado / Borgonha com Ouro & Marfim
+   Flowrish — 3D Scrollytelling Book (Versão 3: Gigante & Abridinha)
+   Cores: Couro Caramelo / Havana Tostado Nobre com Ouro & Marfim
    Contraste total contra o fundo Oliva Escuro (#43442A)
-   Zero movimento autônomo • 100% acoplado à rolagem
+   Tamanho monumental preenchendo a lateral direita
+   Abertura em fresta ("abridinha" ~52°) com palavra unitária gigante
    ============================================================ */
 
 :root {
-  --book-w: 420px;
-  --book-h: 590px;
-  --book-thickness: 48px;
+  --book-w: clamp(480px, 36vw, 580px);
+  --book-h: clamp(740px, 90vh, 890px);
+  --book-thickness: 56px;
 
-  /* Nova Paleta de Alto Destaque (Vinho Borgonha Nobre / Ouro Velho / Marfim) */
-  --book-cover-bg: linear-gradient(145deg, #7A3241 0%, #612330 60%, #4E1B26 100%);
-  --book-cover-border: #9E4557;
-  --book-cover-gold: #E8D4A8;
-  --book-page-bg: #FFFEFB;
-  --book-page-ink: #261719;
-  --book-page-subink: #5E464A;
+  /* Paleta Nobre: Couro Havana / Caramelo Tostado Acolhedor */
+  --book-cover-bg: linear-gradient(150deg, #945738 0%, #7A4225 55%, #592D17 100%);
+  --book-cover-border: #B06E4A;
+  --book-cover-gold: #F5E0B7;
+  --book-page-bg: #FFFDF9;
+  --book-page-ink: #281912;
+  --book-page-subink: #75594C;
   --book-accent-rose: #DF949D;
-  --book-ribbon-gold: #E4C88E;
+  --book-ribbon-gold: #E8D098;
 }
 
 /* ---------- Grid Scrollytelling de Largura Total ---------- */
 .scrolly-container {
   display: grid;
-  grid-template-columns: minmax(480px, 1.15fr) minmax(420px, 0.85fr);
-  gap: 36px;
+  grid-template-columns: minmax(440px, 1.05fr) minmax(480px, 0.95fr);
+  gap: 28px;
   width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   box-sizing: border-box;
-  padding-left: clamp(24px, 5.5vw, 76px);
+  padding-left: clamp(20px, 4.5vw, 68px);
   padding-right: 0;
   position: relative;
   align-items: start;
 }
 
 .scrolly-content {
-  max-width: 650px;
+  max-width: 560px;
   width: 100%;
   position: relative;
   z-index: 2;
   box-sizing: border-box;
 }
 
-/* Coluna Direita com Palco Fixo */
+/* Coluna Direita com Palco Fixo e Encostando nas Bordas */
 .scrolly-aside {
   position: relative;
   z-index: 3;
   width: 100%;
-  height: 100%;
   overflow: visible;
 }
 
 .book-sticky-stage {
   position: sticky;
-  top: calc(var(--header-h) + 10px);
-  height: calc(100vh - var(--header-h) - 20px);
+  top: calc(var(--header-h) - 15px);
+  height: calc(100vh - var(--header-h) + 15px);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  perspective: 2000px;
-  perspective-origin: 75% 50%;
+  perspective: 2200px;
+  perspective-origin: 65% 50%;
   overflow: visible;
   pointer-events: none;
   padding-right: 0;
@@ -71,48 +71,33 @@
   position: relative;
   width: var(--book-w);
   height: var(--book-h);
-  /* Sangra ligeiramente para fora da borda direita da tela no desktop */
-  margin-right: -40px;
-  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Quando aberto, o livro expande a largura total */
-.book-interactive-area.is-open {
-  width: calc(var(--book-w) * 1.82);
+  /* Sangra ligeiramente para fora da borda direita da tela */
   margin-right: -55px;
 }
 
-/* ---------- O Objeto 3D Livro ---------- */
+/* ---------- O Objeto 3D Livro Monumental ---------- */
 .book-3d {
   width: var(--book-w);
   height: var(--book-h);
   position: relative;
   transform-style: preserve-3d;
   will-change: transform;
-  transform: translate3d(0, 0, 0) rotateX(8deg) rotateY(-18deg);
+  transform: translate3d(0, 0, 0) rotateX(6deg) rotateY(-16deg);
   user-select: none;
 }
 
 /* Sombra Projetada na Mesa */
 .book-ambient-shadow {
   position: absolute;
-  bottom: -40px;
-  left: 2%;
-  width: 96%;
-  height: 58px;
-  background: radial-gradient(ellipse at center, rgba(14, 15, 9, 0.75) 0%, rgba(14, 15, 9, 0) 72%);
+  bottom: -46px;
+  left: 0;
+  width: 105%;
+  height: 72px;
+  background: radial-gradient(ellipse at center, rgba(14, 15, 9, 0.82) 0%, rgba(14, 15, 9, 0) 72%);
   border-radius: 50%;
-  transform: rotateX(90deg) translateZ(-24px);
-  filter: blur(14px);
+  transform: rotateX(90deg) translateZ(-28px);
+  filter: blur(16px);
   pointer-events: none;
-  transition: all 0.65s ease;
-}
-
-.book-interactive-area.is-open .book-ambient-shadow {
-  width: 175%;
-  left: -38%;
-  height: 68px;
-  opacity: 0.9;
 }
 
 /* ---------- Capa Traseira ---------- */
@@ -120,12 +105,12 @@
   position: absolute;
   inset: 0;
   background: var(--book-cover-bg);
-  border-radius: 10px 22px 22px 10px;
+  border-radius: 12px 26px 26px 12px;
   border: 2px solid var(--book-cover-border);
   box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.22),
-    inset 0 -4px 8px rgba(0, 0, 0, 0.6),
-    0 24px 50px rgba(0, 0, 0, 0.55);
+    inset 0 2px 4px rgba(255, 255, 255, 0.25),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.65),
+    0 30px 60px rgba(0, 0, 0, 0.6);
   transform: translateZ(calc(var(--book-thickness) * -0.5));
 }
 
@@ -136,11 +121,11 @@
   left: 0;
   width: var(--book-thickness);
   height: var(--book-h);
-  background: linear-gradient(90deg, #441620 0%, #702635 48%, #441620 100%);
-  border-radius: 10px 0 0 10px;
+  background: linear-gradient(90deg, #4A2514 0%, #7A472E 48%, #4A2514 100%);
+  border-radius: 12px 0 0 12px;
   transform: rotateY(-90deg) translateZ(calc(var(--book-thickness) * 0.5));
   transform-origin: left center;
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,242 +136,136 @@
   text-orientation: mixed;
   transform: rotate(180deg);
   font-family: var(--font-heading);
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   color: var(--book-cover-gold);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
   opacity: 0.95;
 }
 
-/* Nervuras douradas na lombada */
 .book-spine::before,
 .book-spine::after {
   content: '';
   position: absolute;
   left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #E8D4A8, transparent);
+  background: linear-gradient(90deg, transparent, var(--book-cover-gold), transparent);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
-.book-spine::before { top: 48px; }
-.book-spine::after { bottom: 48px; }
+.book-spine::before { top: 56px; }
+.book-spine::after { bottom: 56px; }
 
-/* ---------- Bloco de Folhas (Espessura) ---------- */
+/* ---------- Bloco de Folhas (Espessura lateral com páginas visíveis) ---------- */
 .book-pages-block {
   position: absolute;
   top: 6px;
   bottom: 6px;
-  left: 8px;
+  left: 10px;
   right: 6px;
   background: repeating-linear-gradient(
     to bottom,
-    #F8F3E6,
-    #F8F3E6 2px,
-    #E8DCBE 3px,
-    #E8DCBE 4px
+    #FAF4E6,
+    #FAF4E6 2px,
+    #EADBBE 3px,
+    #EADBBE 4px
   );
-  border-radius: 4px 18px 18px 4px;
+  border-radius: 4px 22px 22px 4px;
   transform: translateZ(calc(var(--book-thickness) * -0.45));
   box-shadow: 
-    inset 0 1px 3px rgba(0, 0, 0, 0.3),
-    inset -6px 0 12px rgba(0, 0, 0, 0.2);
+    inset 0 1px 3px rgba(0, 0, 0, 0.35),
+    inset -8px 0 16px rgba(0, 0, 0, 0.25);
 }
 
-/* ---------- Miolo Aberto: Páginas Esquerda & Direita ---------- */
-.book-spread {
+/* ---------- O Interior do Livro (Página Interna com a Palavra Gigante) ---------- */
+.book-inside-page {
   position: absolute;
-  inset: 0;
-  display: flex;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform-style: preserve-3d;
-  transition: opacity 0.4s ease 0.15s, visibility 0.4s ease 0.15s;
-}
-
-.book-interactive-area.is-open .book-spread {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.book-page-leaf {
-  width: calc(var(--book-w) * 0.91);
-  height: var(--book-h);
+  inset: 6px 8px 6px 12px;
   background: var(--book-page-bg);
-  box-sizing: border-box;
-  padding: 44px 38px;
-  position: relative;
-  overflow: hidden;
+  border-radius: 6px 20px 20px 6px;
+  transform: translateZ(calc(var(--book-thickness) * 0.45));
   box-shadow: 
     inset 0 1px 3px rgba(255, 255, 255, 0.9),
     inset 0 -3px 6px rgba(0, 0, 0, 0.08),
-    0 12px 32px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* Página da Esquerda */
-.book-page-left {
-  border-radius: 14px 4px 4px 14px;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(to right, #EDE5D2 0%, var(--book-page-bg) 14%, var(--book-page-bg) 96%, #E4DAC4 100%);
-  transform-origin: right center;
-  transform: rotateY(0deg) translateZ(1px);
-}
-
-/* Página da Direita */
-.book-page-right {
-  border-radius: 4px 14px 14px 4px;
-  border-left: 1px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(to left, #EDE5D2 0%, var(--book-page-bg) 14%, var(--book-page-bg) 96%, #E4DAC4 100%);
-  transform-origin: left center;
-  transform: rotateY(0deg) translateZ(1px);
-}
-
-/* Sombra Central da Canaleta (Gutter) */
-.book-gutter-shadow {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 38px;
-  pointer-events: none;
-  z-index: 5;
-}
-.book-page-left .book-gutter-shadow {
-  right: 0;
-  background: linear-gradient(to left, rgba(38, 23, 25, 0.22), transparent);
-}
-.book-page-right .book-gutter-shadow {
-  left: 0;
-  background: linear-gradient(to right, rgba(38, 23, 25, 0.22), transparent);
-}
-
-/* Conteúdo da Página Esquerda: Editorial e Forte */
-.page-ornament {
-  font-size: 0.95rem;
-  letter-spacing: 0.35em;
-  color: var(--book-accent-rose);
-  opacity: 0.85;
-}
-
-.page-hero-text {
-  margin: auto 0;
-}
-
-.page-kicker {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: #8C3A4B;
-  margin-bottom: 12px;
-}
-
-.page-headline {
-  font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 3.8vw, 3rem);
-  font-weight: 700;
-  line-height: 1.08;
-  color: var(--book-page-ink);
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-
-.page-accent-line {
-  width: 54px;
-  height: 4px;
-  background: var(--book-accent-rose);
-  border-radius: 2px;
-  margin: 20px 0 16px;
-}
-
-.page-subheadline {
-  font-family: var(--font-body);
-  font-size: 1.08rem;
-  font-weight: 600;
-  color: var(--book-page-subink);
-  margin: 0;
-}
-
-.page-footer-mark {
-  padding-top: 14px;
-  border-top: 1px solid rgba(38, 23, 25, 0.12);
-}
-
-/* Conteúdo da Página Direita: Textos Unitários e BEM GRANDES */
-.page-step-card-dynamic {
+    0 12px 30px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
-.page-big-number {
+/* Sombra na junção da lombada interna */
+.book-inside-page::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 50px;
+  background: linear-gradient(to right, rgba(38, 27, 22, 0.3), transparent);
+  pointer-events: none;
+}
+
+/* Textos Unitários e GIGANTES dentro do Livro */
+.book-word-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transition: opacity 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.book-word-wrap.is-updating {
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+}
+
+.book-word-num {
   font-family: var(--font-heading);
-  font-size: clamp(3.2rem, 5.5vw, 4.2rem);
-  font-weight: 700;
+  font-size: clamp(3.8rem, 6vw, 5.4rem);
+  font-weight: 800;
   line-height: 1;
-  color: var(--book-accent-rose);
+  color: var(--book-cover-border);
   margin-bottom: 8px;
-  display: block;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
+  text-shadow: 0 2px 6px rgba(176, 110, 74, 0.2);
 }
 
-.page-big-badge {
-  display: inline-block;
-  align-self: flex-start;
+.book-single-word {
   font-family: var(--font-heading);
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: #8C3A4B;
-  background: rgba(223, 148, 157, 0.22);
-  padding: 4px 12px;
-  border-radius: 9999px;
-  margin-bottom: 14px;
-}
-
-.page-big-title {
-  font-family: var(--font-heading);
-  font-size: clamp(2.4rem, 4.4vw, 3.4rem);
-  font-weight: 700;
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  font-weight: 900;
   line-height: 1.05;
   color: var(--book-page-ink);
-  margin: 0 0 16px;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.page-big-desc {
+.book-word-divider {
+  width: 56px;
+  height: 4px;
+  background: var(--book-accent-rose);
+  border-radius: 2px;
+  margin: 18px auto 14px;
+}
+
+.book-single-sub {
   font-family: var(--font-body);
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--book-page-subink);
-  line-height: 1.5;
-  margin: 0 0 24px;
-  max-width: 320px;
-}
-
-.page-big-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: rgba(120, 48, 62, 0.08);
-  border-left: 3.5px solid var(--book-accent-rose);
-  border-radius: 0 10px 10px 0;
-  font-size: 0.9rem;
+  font-size: clamp(1rem, 1.35vw, 1.2rem);
   font-weight: 600;
-  color: #612330;
+  color: var(--book-page-subink);
+  max-width: 320px;
+  line-height: 1.45;
 }
 
-/* ---------- Capa Frontal 3D (Clean: SOMENTE a Flor!) ---------- */
+/* ---------- Capa Frontal 3D (Abridinha em Fresta) ---------- */
 .book-front-cover {
   position: absolute;
   inset: 0;
@@ -395,123 +274,121 @@
   will-change: transform;
   transform: rotateY(0deg) translateZ(calc(var(--book-thickness) * 0.5));
   transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-  border-radius: 10px 22px 22px 10px;
+  border-radius: 12px 26px 26px 12px;
 }
 
+/* Quando "dá a abridinha", abre a capa em V (~114° em 3D) revelando a palavra interna */
 .book-interactive-area.is-open .book-front-cover {
-  transform: rotateY(-180deg) translateZ(calc(var(--book-thickness) * 0.5));
+  transform: rotateY(-114deg) translateZ(calc(var(--book-thickness) * 0.5));
 }
 
-/* Lado Externo da Capa (Front Face: SEM NENHUM TEXTO, SÓ A FLOR 3D) */
+/* Lado Externo da Capa: SOMENTE A FLOR DO FLOWRISH */
 .book-cover-face-front {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   background: var(--book-cover-bg);
-  border-radius: 10px 22px 22px 10px;
+  border-radius: 12px 26px 26px 12px;
   border: 2px solid var(--book-cover-border);
   box-shadow: 
-    inset 0 2px 4px rgba(255, 255, 255, 0.28),
-    inset 0 -4px 8px rgba(0, 0, 0, 0.65),
-    0 24px 48px rgba(0, 0, 0, 0.5);
+    inset 0 3px 6px rgba(255, 255, 255, 0.3),
+    inset 0 -5px 10px rgba(0, 0, 0, 0.7),
+    0 28px 56px rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 30px;
+  padding: 40px;
   box-sizing: border-box;
 }
 
-/* Moldura decorativa dourada em relevo */
+/* Moldura dourada decorativa em relevo */
 .book-cover-frame {
   position: absolute;
-  inset: 18px;
-  border: 1.5px solid rgba(232, 212, 168, 0.55);
-  border-radius: 6px 16px 16px 6px;
+  inset: 22px;
+  border: 1.5px solid rgba(244, 226, 189, 0.55);
+  border-radius: 8px 18px 18px 8px;
   pointer-events: none;
-  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.4);
 }
 .book-cover-frame::before {
   content: '';
   position: absolute;
-  inset: 6px;
-  border: 1px dashed rgba(232, 212, 168, 0.3);
-  border-radius: 4px 12px 12px 4px;
+  inset: 8px;
+  border: 1px dashed rgba(244, 226, 189, 0.35);
+  border-radius: 6px 14px 14px 6px;
 }
 
-/* A Flor do Flowrish em Destaque Gigante Centralizado */
+/* A Flor do Flowrish em Tamanho Grande e Centralizada */
 .book-cover-flower-wrap {
   position: relative;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 250px;
-  height: 250px;
+  width: 280px;
+  height: 280px;
 }
 
 .book-cover-flower {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.7));
 }
 
-/* Lado Interno da Capa (Guarda Marfim com Moldura) */
+/* Lado Interno da Capa (Aparece ao dar a abridinha) */
 .book-cover-face-back {
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transform: rotateY(180deg);
-  background: #501D28;
-  border-radius: 22px 10px 10px 22px;
+  background: #522B1A;
+  border-radius: 26px 12px 12px 26px;
   border: 2px solid var(--book-cover-border);
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.7);
   box-sizing: border-box;
-  color: #FFF;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.book-ex-libris {
-  border: 1.5px solid rgba(232, 212, 168, 0.45);
-  padding: 24px 20px;
+.book-inside-lining {
+  width: 84%;
+  height: 88%;
+  border: 1.5px solid rgba(244, 226, 189, 0.35);
   border-radius: 12px;
-  background: rgba(26, 9, 13, 0.45);
-  max-width: 85%;
+  background: rgba(30, 15, 9, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.book-ex-libris h5 {
-  font-family: var(--font-heading);
-  font-size: 1.15rem;
-  color: var(--book-cover-gold);
-  margin: 0 0 8px;
-}
-.book-ex-libris p {
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
-  line-height: 1.45;
+.book-lining-seal {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #F5ACB5 0%, #DF949D 60%, #9E4557 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
 }
 
-/* ---------- Fita Marcadora no Centro da Canaleta ---------- */
+/* ---------- Fita Marcadora Dourada ---------- */
 .book-ribbon {
   position: absolute;
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%) translateZ(calc(var(--book-thickness) * 0.48));
-  width: 16px;
-  height: calc(var(--book-h) + 48px);
-  background: linear-gradient(180deg, #F5DCA8 0%, var(--book-ribbon-gold) 70%, #B89758 100%);
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.4);
-  border-radius: 0 0 3px 3px;
+  top: -10px;
+  left: 28px;
+  transform: translateZ(calc(var(--book-thickness) * 0.48));
+  width: 18px;
+  height: calc(var(--book-h) + 54px);
+  background: linear-gradient(180deg, #F8E8C2 0%, var(--book-ribbon-gold) 70%, #BA9755 100%);
+  box-shadow: 2px 4px 14px rgba(0, 0, 0, 0.45);
+  border-radius: 0 0 4px 4px;
   pointer-events: none;
   z-index: 12;
-  transition: transform 0.6s ease;
 }
 
 .book-ribbon::after {
@@ -521,9 +398,9 @@
   left: 0;
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 8px solid #501D28;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid #582F1C;
 }
 
 /* ---------- Responsividade (< 992px) ---------- */
@@ -541,47 +418,38 @@
 
   .scrolly-aside {
     order: -1;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .book-sticky-stage {
     position: relative;
     top: 0;
     height: auto;
-    padding: 20px 0 32px;
+    padding: 16px 0 28px;
     justify-content: center;
-    perspective: 1200px;
+    perspective: 1400px;
   }
 
   :root {
-    --book-w: 290px;
-    --book-h: 410px;
-    --book-thickness: 34px;
+    --book-w: 300px;
+    --book-h: 420px;
+    --book-thickness: 36px;
   }
 
   .book-interactive-area {
     margin-right: 0;
   }
 
-  .book-interactive-area.is-open {
-    width: var(--book-w);
-    margin-right: 0;
-  }
-
   .book-cover-flower-wrap {
-    width: 170px;
-    height: 170px;
+    width: 180px;
+    height: 180px;
   }
 
-  .book-page-leaf {
-    padding: 24px 20px;
+  .book-single-word {
+    font-size: 2.2rem;
   }
 
-  .page-big-title {
-    font-size: 2rem;
-  }
-
-  .page-big-number {
-    font-size: 2.5rem;
+  .book-word-num {
+    font-size: 2.6rem;
   }
 }

@@ -1,7 +1,7 @@
 /**
- * Flowrish — 3D Scrollytelling Book Controller (V2)
+ * Flowrish — 3D Scrollytelling Book Controller (V3: Gigante & Abridinha)
  * Movimento 100% acoplado à rolagem do usuário (zero movimento autônomo).
- * Títulos unitários gigantes e transições precisas por seção.
+ * Títulos unitários gigantes e transições suaves por etapa.
  */
 
 export function init3DBook() {
@@ -9,67 +9,55 @@ export function init3DBook() {
   const bookArea = document.getElementById('bookArea');
   if (!bookEl || !bookArea) return;
 
-  // Elementos do cartão dinâmico de texto gigante da página direita
-  const pageBigNum = document.getElementById('pageBigNum');
-  const pageBigBadge = document.getElementById('pageBigBadge');
-  const pageBigTitle = document.getElementById('pageBigTitle');
-  const pageBigDesc = document.getElementById('pageBigDesc');
-  const pageBigTag = document.getElementById('pageBigTag');
+  // Elementos do texto unitário gigante dentro do livro
+  const bookWordWrap = document.getElementById('bookWordWrap');
+  const bookWordNum = document.getElementById('bookWordNum');
+  const bookSingleWord = document.getElementById('bookSingleWord');
+  const bookSingleSub = document.getElementById('bookSingleSub');
 
   // Estados angulares
-  let currentRotY = -18;
-  let targetRotY = -18;
-  let currentRotX = 8;
-  let targetRotX = 8;
+  let currentRotY = -16;
+  let targetRotY = -16;
+  let currentRotX = 6;
+  let targetRotX = 6;
   let isOpen = false;
   let isTicking = false;
+  let currentActiveWord = '';
 
   // Dados unitários e grandiosos por etapa
   const STEPS_DATA = [
     {
       num: '01',
-      badge: 'PASSO 1',
-      title: 'ANUNCIE',
-      desc: 'Cadastre seus livros pelo ISBN com capa e dados automáticos.',
-      tag: '✦ Rápido & Sem burocracia'
+      word: 'ANUNCIE',
+      sub: 'ISBN com capa e dados automáticos'
     },
     {
       num: '02',
-      badge: 'PASSO 2',
-      title: 'ENCONTRE',
-      desc: 'Explore centenas de títulos no catálogo com busca em tempo real.',
-      tag: '✦ Filtros por gênero literário'
+      word: 'ENCONTRE',
+      sub: 'Filtros rápidos e busca em tempo real'
     },
     {
       num: '03',
-      badge: 'PASSO 3',
-      title: 'COMBINE',
-      desc: 'Conecte-se direto no WhatsApp com o dono do livro sem taxas.',
-      tag: '✦ Conversa direta & ágil'
+      word: 'COMBINE',
+      sub: 'Direto pelo WhatsApp sem taxas'
     },
     {
       num: '04',
-      badge: 'PASSO 4',
-      title: 'AVALIE',
-      desc: 'Troque histórias e fortaleça a confiança na comunidade.',
-      tag: '✦ Reputação real e transparente'
+      word: 'AVALIE',
+      sub: 'Reputação real na comunidade leitora'
     }
   ];
 
   const HIGHLIGHTS_DATA = {
     num: '★',
-    badge: 'EM ALTA',
-    title: 'ACERVO',
-    desc: 'Os livros mais amados e procurados pelos leitores hoje.',
-    tag: '✦ Destaques da semana'
+    word: 'DESTAQUES',
+    sub: 'Livros mais amados da semana'
   };
 
   const FINAL_DATA = {
-    num: '✦',
-    badge: 'JUNTE-SE',
-    title: 'FLORESÇA',
-    desc: 'Dê uma nova história aos seus livros e encontre seus próximos favoritos.',
-    tag: '✦ Cadastro gratuito'
+    num: '🌸',
+    word: 'FLORESÇA',
+    sub: 'Comece a trocar hoje mesmo'
   };
 
   // Seções para rastreamento
@@ -80,21 +68,21 @@ export function init3DBook() {
   const ctaSection = document.getElementById('depoimentos');
 
   function updatePageText(data) {
-    if (!data) return;
-    if (pageBigNum && pageBigNum.textContent !== data.num) {
-      pageBigNum.textContent = data.num;
-    }
-    if (pageBigBadge && pageBigBadge.textContent !== data.badge) {
-      pageBigBadge.textContent = data.badge;
-    }
-    if (pageBigTitle && pageBigTitle.textContent !== data.title) {
-      pageBigTitle.textContent = data.title;
-    }
-    if (pageBigDesc && pageBigDesc.textContent !== data.desc) {
-      pageBigDesc.textContent = data.desc;
-    }
-    if (pageBigTag && pageBigTag.textContent !== data.tag) {
-      pageBigTag.textContent = data.tag;
+    if (!data || data.word === currentActiveWord) return;
+    currentActiveWord = data.word;
+
+    if (bookWordWrap) {
+      bookWordWrap.classList.add('is-updating');
+      setTimeout(() => {
+        if (bookWordNum) bookWordNum.textContent = data.num;
+        if (bookSingleWord) bookSingleWord.textContent = data.word;
+        if (bookSingleSub) bookSingleSub.textContent = data.sub;
+        bookWordWrap.classList.remove('is-updating');
+      }, 120);
+    } else {
+      if (bookWordNum) bookWordNum.textContent = data.num;
+      if (bookSingleWord) bookSingleWord.textContent = data.word;
+      if (bookSingleSub) bookSingleSub.textContent = data.sub;
     }
   }
 
@@ -119,17 +107,17 @@ export function init3DBook() {
     const ctaRect = ctaSection?.getBoundingClientRect();
 
     // 1. Hero: Livro Fechado (Seção 1)
-    if (scrollY < (heroSection?.offsetHeight || 600) * 0.4) {
+    if (scrollY < (heroSection?.offsetHeight || 600) * 0.45) {
       setOpenState(false);
-      targetRotY = -18;
-      targetRotX = 8;
+      targetRotY = -16;
+      targetRotX = 6;
       return;
     }
 
-    // 2. Como Funciona: Livro Aberto com Passos Unitários (Seção 2)
+    // 2. Como Funciona: Livro com Abridinha e Palavras Unitárias (Seção 2)
     if (stepsRect && stepsRect.top < windowH * 0.75 && stepsRect.bottom > windowH * 0.25) {
       setOpenState(true);
-      targetRotY = -5;
+      targetRotY = -12;
       targetRotX = 4;
 
       const stepCards = stepsSection.querySelectorAll('.step-card');
@@ -147,8 +135,8 @@ export function init3DBook() {
     // 3. Livros Mais Amados (Seção 3)
     if (booksRect && booksRect.top < windowH * 0.75 && booksRect.bottom > windowH * 0.25) {
       setOpenState(true);
-      targetRotY = -8;
-      targetRotX = 5;
+      targetRotY = -10;
+      targetRotX = 4;
       updatePageText(HIGHLIGHTS_DATA);
       return;
     }
@@ -156,15 +144,15 @@ export function init3DBook() {
     // 4. Benefícios e CTA (Seções Finais)
     if ((benefitsRect && benefitsRect.top < windowH * 0.75) || (ctaRect && ctaRect.top < windowH * 0.8)) {
       setOpenState(true);
-      targetRotY = -4;
-      targetRotX = 3;
+      targetRotY = -12;
+      targetRotX = 4;
       updatePageText(FINAL_DATA);
       return;
     }
 
-    // Padrão caso esteja em transição aberta
+    // Padrão em transição aberta
     setOpenState(true);
-    targetRotY = -6;
+    targetRotY = -12;
     targetRotX = 4;
   }
 
