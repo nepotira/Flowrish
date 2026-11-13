@@ -29,7 +29,7 @@
 <div id="navbar-root"></div>
 
 <main id="main">
-  <div class="container scrolly-container">
+  <div class="scrolly-container">
     <!-- COLUNA ESQUERDA: CONTEÚDO PRINCIPAL DO SITE -->
     <div class="scrolly-content">
       <!-- HERO SECTION -->
@@ -163,50 +163,39 @@
               <!-- Página esquerda -->
               <div class="book-page-leaf book-page-left">
                 <div class="book-gutter-shadow"></div>
-                <div class="page-header-micro">
-                  <span class="page-chapter">Flowrish • Comunidade</span>
-                  <span class="page-number">pag. 12</span>
+                <div class="page-ornament">✦ ✦ ✦</div>
+                <div class="page-hero-text">
+                  <span class="page-kicker">COMUNIDADE</span>
+                  <h2 class="page-headline">HISTÓRIAS<br>QUE<br>FLORESCEM.</h2>
+                  <div class="page-accent-line"></div>
+                  <p class="page-subheadline">Troque livros. Conecte pessoas.</p>
                 </div>
-                <div class="page-body">
-                  <div class="page-wax-seal">🌸</div>
-                  <h4>Histórias que florescem</h4>
-                  <p>Cada livro carrega o carinho de quem o leu. Em nossa comunidade, cada troca une dois apaixonados por leitura.</p>
-                  <blockquote class="page-quote">
-                    "Um livro compartilhado é uma história que nunca morre."
-                  </blockquote>
-                  <img src="assets/logo-horizontal-marrom.png" alt="Flowrish" style="height:22px;margin-top:14px;opacity:0.85;">
+                <div class="page-footer-mark">
+                  <img src="assets/logo-horizontal-marrom.png" alt="" style="height:24px;opacity:0.85;">
                 </div>
               </div>
 
               <!-- Página direita (dinâmica sincronizada com o scroll) -->
               <div class="book-page-leaf book-page-right">
                 <div class="book-gutter-shadow"></div>
-                <div class="page-header-micro">
-                  <span class="page-chapter" id="pageChapter">Capítulo 1 • O Anúncio</span>
-                  <span class="page-number">pag. 13</span>
-                </div>
-                <div class="page-body">
-                  <span class="page-step-badge" id="pageStepBadge">Passo 1 de 4</span>
-                  <h4 id="pageStepTitle">Anuncie seus livros</h4>
-                  <p id="pageStepDesc">Dê uma nova história ao livro que já leu. Preencha pelo ISBN ou manual com capa e fotos reais.</p>
-                  <div style="margin-top:18px;padding:10px 12px;background:rgba(67,68,42,0.08);border-radius:10px;font-size:0.82rem;color:#353620;border-left:3px solid #DF949D;">
-                    ✨ <strong>Dica:</strong> Propostas combinadas no WhatsApp têm resposta média em menos de 15 minutos!
-                  </div>
+                <div class="page-step-card-dynamic">
+                  <span class="page-big-number" id="pageBigNum">01</span>
+                  <span class="page-big-badge" id="pageBigBadge">PASSO 1</span>
+                  <h2 class="page-big-title" id="pageBigTitle">ANUNCIE</h2>
+                  <p class="page-big-desc" id="pageBigDesc">Cadastre seus livros pelo ISBN com capa e dados automáticos.</p>
+                  <div class="page-big-tag" id="pageBigTag">✦ Rápido & Sem burocracia</div>
                 </div>
               </div>
             </div>
 
-            <!-- Capa frontal interativa (abre e fecha em 3D) -->
+            <!-- Capa frontal interativa (SOMENTE a flor, sem texto) -->
             <div class="book-front-cover">
-              <!-- Lado externo da capa -->
+              <!-- Lado externo da capa: pura elegância com a flor 3D -->
               <div class="book-cover-face-front">
                 <div class="book-cover-frame"></div>
-                <div>
-                  <div class="book-cover-tagline">Comunidade de Leitores</div>
-                  <div class="book-cover-title">Flowrish</div>
+                <div class="book-cover-flower-wrap">
+                  <img src="assets/logomarca.png" alt="Flowrish" class="book-cover-flower">
                 </div>
-                <img src="assets/logomarca.png" alt="Flowrish" class="book-cover-flower">
-                <div class="book-cover-footer">Troque livros • Descubra histórias</div>
               </div>
 
               <!-- Lado interno da capa (guarda do livro) -->
@@ -221,11 +210,6 @@
             <!-- Lombada 3D -->
             <div class="book-spine">
               <span class="book-spine-text">FLOWRISH • VOL. 1</span>
-            </div>
-
-            <!-- Dica tátil de clique / interação -->
-            <div class="book-hint-pill" id="bookHintPill">
-              <span id="bookHintText">Role para abrir ou clique</span>
             </div>
           </div>
         </div>
