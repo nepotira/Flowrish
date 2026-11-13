@@ -1,8 +1,21 @@
 # Handoff de Continuidade — Flowrish
 
-> **Data:** 03/11/2026  
-> **Autor:** Antigravity (Argon / Gemini 2.5 Pro)  
-> **Contexto:** Integração da versão oficial do repositório (`origin/troca-pelo-whatsapp`) com o Design System Claymorphism Soft 3D, governança GitHub e adaptação Linux.
+> **Data:** 13/11/2026  
+> **Autor:** Antigravity  
+> **Contexto:** Especificação e implementação do Livro 3D Scrollytelling preservados com segurança na branch `test/interactive-3d-book`.  
+> **Documento Completo:** `docs/handoffs/2026-11-13-interactive-3d-book.md`
+
+---
+
+## 1. Experimento Guardado: Livro 3D Interativo
+- **Branch:** `test/interactive-3d-book` (sincronizada com `origin/test/interactive-3d-book`).
+- **Estado:** Totalmente implementado conforme o esboço do usuário (livro monumental preenchendo a lateral direita, couro Havana com ouro, sem texto na capa, abertura em V e palavras unitárias gigantes).
+- **Como Retomar:** `git checkout test/interactive-3d-book && node server.js`.
+
+---
+
+## 2. Base Estável do Projeto
+- **Branch de Produção:** `main` (Claymorphism Soft 3D completo + trocas diretas via WhatsApp + Cloud Firestore + 10 testes unitários).
 
 ---
 
