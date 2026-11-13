@@ -18,3 +18,6 @@
 
 5. **Repositório Primário Independente (`nepotira/Flowrish`)**:
    - Toda alteração, desenvolvimento, ramo e entrega do projeto deve obrigatoriamente ser originada e sincronizada no repositório `nepotira/Flowrish` (`origin`). O antigo fork no GitHub permanece intacto exclusivamente como ponto de restauração/backup.
+
+6. **Automação do Servidor Local em Testes**:
+   - Sempre que uma funcionalidade, alteração visual ou branch de teste for apresentada para validação do usuário, inicializar imediatamente o servidor localhost em segundo plano (background daemon na porta 8080 via `node server.js`) e fornecer o link direto pronto para acesso (`http://localhost:8080`), sem exigir que o usuário precise disparar comandos manuais para subir o ambiente.
