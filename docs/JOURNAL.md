@@ -1,5 +1,18 @@
 # Diário de Bordo — Flowrish
 
+## 14 de Novembro de 2026 — Correção Completa da Interface Mobile e Eliminação de Overflow Horizontal
+- **Contexto:** Relato visual com capturas reais do site publicado em `nepotira.github.io/Flowrish` mostrando o botão de menu (`≡`) cortado à direita do cabeçalho em telas estreitas e possíveis desalinhamentos em outros viewports móveis.
+- **Diagnóstico e Causa Raiz (Auditoria via Headless Chrome CDP):**
+  - Em `<= 960px`, `.nav-links` (`margin-right: auto`) era ocultado sem `justify-content: space-between` em `.navbar-inner` e o logotipo permanecia em `42px` (`184px` de largura), fazendo a soma dos itens da barra (`443px`) ultrapassar `390px`/`360px` e empurrar `#navToggle` para fora da tela.
+  - `.nav-search { display: none; }` ocultava acidentalmente `.mobile-search` dentro de `.mobile-drawer`.
+  - `.footer-grid` e `.footer-bottom` não tinham empilhamento mobile em `<= 768px`, e `.lib-filter-genero` vazava horizontalmente por ausência de `min-width: 0` e quebra de linha nos chips.
+  - O hero mobile em `home.css` empurrava a base da flor para trás da barra inferior (`+ Anunciar`).
+- **Mudanças Realizadas (branch `fix/mobile-layout-overflow` a partir de `main`):**
+  - `css/variables.css`, `css/base.css`, `css/components.css`: `--header-h: 68px` (`<= 640px`), `overflow-x: clip` e `scroll-padding-top`, `navbar-inner` responsivo até `320px`, busca no drawer restaurada, `.footer-grid`/`.footer-bottom` empilhados em `<= 768px`.
+  - `css/pages/home.css`, `biblioteca.css`, `livro.css`, `perfil.css`, `auth.css`, `cadastrar-livro.css` e `index.html`: refinamento de espaçamentos, filtros, modais, abas e header da seção `#destaques`.
+  - Cache-busting atualizado para `?v=1.3.5` nas 11 páginas HTML.
+- **Verificação:** `npm test` (Vitest) com 3 arquivos e 18 testes passando; auditoria automática em Chrome headless (`390x844`, `360x800` e `320x640`) com `overflows=0` em todas as 11 páginas HTML e inspeção visual das capturas pós-correção.
+
 ## 13 de Novembro de 2026 — Modernização dos Avisos e Notificações (Eliminação do Alert Nativo)
 
 - **Contexto**: Relato do operador com captura de tela demonstrando o alerta nativo e cinzento do navegador (`nepotira.github.io diz: Erro ao entrar`) ao falhar a autenticação. Solicitação para substituir o aviso nativo por notificações modernas integradas ao design do site (Claymorphism Soft 3D).

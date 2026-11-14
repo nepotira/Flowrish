@@ -4,7 +4,12 @@
    Reset & Base — Claymorphism Soft 3D UI
    ============================================ */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h, 84px) + 16px);
+  overflow-x: clip;
+  max-width: 100%;
+}
 
 body {
   margin: 0;
@@ -14,7 +19,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
   position: relative;
   min-height: 100vh;
 }
@@ -439,5 +445,21 @@ input[type="checkbox"]:checked::after {
   }
   .site-footer {
     padding-bottom: calc(var(--bottom-nav-h, 68px) + var(--sab, 0px) + 24px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    padding: 0 16px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  .modal-overlay {
+    padding: 16px;
+  }
+  .modal, .modal-card {
+    padding: 24px 20px;
+    border-radius: 22px;
   }
 }
