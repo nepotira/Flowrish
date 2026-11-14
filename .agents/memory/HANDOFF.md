@@ -1,10 +1,21 @@
 # Handoff de Continuidade — Flowrish
 
-> **Data:** 03/11/2026  
-> **Autor:** Antigravity (Argon / Gemini 2.5 Pro)  
-> **Contexto:** Integração da versão oficial do repositório (`origin/troca-pelo-whatsapp`) com o Design System Claymorphism Soft 3D, governança GitHub e adaptação Linux.
+> **Data:** 14/11/2026  
+> **Autor:** Antigravity  
+> **Contexto:** Correção completa da interface mobile e eliminação de overflow horizontal (`320px`–`960px`) em `nepotira/Flowrish` (`fix/mobile-layout-overflow` -> `main`).
 
 ---
+
+## Última Atualização (14/11/2026)
+- **Navbar e Cabeçalho Mobile (`css/variables.css`, `css/components.css`):** Corrigido recorte do botão `≡` fora da viewport com `--header-h: 68px` (`<= 640px`), `justify-content: space-between`, redução proporcional do logo (`32px`/`28px`) e botões compactos (`36px`–`40px`).
+- **Busca na Gaveta Mobile e Footer (`css/components.css`):** Escopo corrigido para `.navbar .nav-search` restaurando `.mobile-search` na gaveta; `.footer-grid` e `.footer-bottom` empilhados em `<= 768px`.
+- **Páginas e Filtros (`css/base.css`, `css/pages/*.css`, `index.html`, `*.html`):** `overflow-x: clip` global, `scroll-padding-top`, quebra de linha em `.filter-chip-list`, refinamento de modais/abas/hero mobile e cache-busting `?v=1.3.5` nas 11 páginas HTML.
+- **Verificação:** `18/18` testes Vitest aprovados e auditoria Chrome headless com `0` overflows horizontais nas 11 páginas em `390x844`, `360x800` e `320x640`.
+
+---
+
+## Histórico Anterior (03/11/2026)
+- **Integração Claymorphism Soft 3D & Troca via WhatsApp** (ver `docs/JOURNAL.md`).
 
 ## O que foi realizado
 1. **Configuração e Governança do Repositório Público**:

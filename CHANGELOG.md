@@ -6,6 +6,13 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/)
 e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
+### Corrigido
+- **Responsividade Mobile & Overflow Horizontal (`320px`–`960px`):**
+  - Corrigido recorte do botão de menu (`≡`) fora da viewport no cabeçalho mobile (`css/components.css`, `css/variables.css`) com `--header-h: 68px` em `<= 640px`, `justify-content: space-between`, redução proporcional do logotipo (`32px`/`28px`) e botões compactos (`36px`–`40px`).
+  - Corrigido seletor `.nav-search { display: none; }` para `.navbar .nav-search { display: none; }`, restaurando a barra de busca dentro da gaveta mobile (`.mobile-drawer .mobile-search`).
+  - Eliminado vazamento horizontal nas páginas `biblioteca.html` e `acervo.html` (`min-width: 0; max-width: 100%;` em `.lib-filter-genero` e quebra de linha em `.filter-chip-list`), além de ajustes de grids/modais/abas em `home.css`, `livro.css`, `perfil.css`, `auth.css`, `cadastrar-livro.css` e `footer` em `components.css`.
+  - Aplicado `overflow-x: clip` e `scroll-padding-top` em `css/base.css` e cache-busting `?v=1.3.5` nas 11 páginas HTML.
+
 ### Alterado
 - **Substituição de Alertas Nativos por Sistema Moderno de Toasts Soft 3D**:
   - `js/toast.js`: Fim do uso de `alert()` do navegador; introdução de toasts flutuantes modernos no topo central da tela com ícones táteis SVG dinâmicos por contexto (`error`, `success`, `warning`, `info`), fechamento manual, auto-dismiss programado e pausa de exibição ao passar o cursor.

@@ -233,21 +233,20 @@ html[data-theme="light"] .library-page {
   .lib-filter-genero .filter-chip-list { justify-content: flex-start; }
 }
 @media (max-width: 560px) {
-  .lib-main { padding-bottom: 80px; }
-  .lib-search-row { gap: 12px; }
+  .lib-main { padding-top: calc(var(--header-h) + 18px); padding-bottom: 80px; }
+  .lib-search-row { gap: 10px; }
+  .lib-search { height: 48px; padding: 0 16px; gap: 10px; }
+  .lib-filter-btn { width: 48px; height: 48px; }
   .lib-search input { font-size: 1rem; }
   .lib-filters { padding: 14px 16px 18px; border-radius: 20px; }
+  .lib-filter-genero {
+    min-width: 0;
+    max-width: 100%;
+  }
   .lib-filter-genero .filter-chip-list {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 6px;
+    flex-wrap: wrap;
     gap: 8px;
-  }
-  .lib-filter-genero .filter-chip-list::-webkit-scrollbar {
-    display: none;
   }
   .lib-filters .filter-chip {
     flex: 0 0 auto;
@@ -255,7 +254,8 @@ html[data-theme="light"] .library-page {
     padding: 5px 12px;
     font-size: 0.82rem;
   }
-  .lib-filters-bottom .lib-filter-group { padding: 0; border-left: none; flex: 1 1 100%; }
+  .lib-filters-bottom .lib-filter-group { padding: 0; border-left: none; flex: 1 1 100%; min-width: 0; }
+  .lib-select { width: 100%; }
   .lib-clear { margin-left: 0; }
   .lib-grid {
     grid-template-columns: repeat(2, 1fr);

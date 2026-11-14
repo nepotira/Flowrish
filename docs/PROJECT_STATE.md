@@ -1,10 +1,10 @@
 # Estado do Projeto — Flowrish
 
-> **Data de Atualização:** 13 de Novembro de 2026  
-> **Versão:** 1.3.0 (Claymorphism Soft 3D Integral & Adaptação Mobile)  
+> **Data de Atualização:** 14 de Novembro de 2026  
+> **Versão:** 1.3.0 (Claymorphism Soft 3D Integral & Correção Mobile Completa)  
 > **Status:** Conforme & Estável  
 > **Repositório Primário:** `nepotira/Flowrish` (independente, não-fork)  
-> **Branch Ativa:** `main` (sincronizada com `origin/main` e `fork-flourish/main`)  
+> **Branch Ativa:** `fix/mobile-layout-overflow` -> `main` (PR e deploy GitHub Pages em curso)  
 
 ---
 
