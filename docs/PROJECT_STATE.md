@@ -4,7 +4,7 @@
 > **Versão:** 1.3.0 (Claymorphism Soft 3D Integral & Correção Mobile Completa)  
 > **Status:** Conforme & Estável  
 > **Repositório Primário:** `nepotira/Flowrish` (independente, não-fork)  
-> **Branch Ativa:** `fix/mobile-layout-overflow` -> `main` (PR e deploy GitHub Pages em curso)  
+> **Branch Ativa:** `main` (sincronizada após `fix/mobile-layout-overflow` e `fix/hero-safari-shadow-glitch`)  
 
 ---
 
