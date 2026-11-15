@@ -1,5 +1,14 @@
 # Diário de Bordo — Flowrish
 
+## 14 de Novembro de 2026 — Correção do Fechamento (`X`), Swipe em 4 Direções nos Toasts e Guia Firebase
+- **Sintoma:** O botão `X` nas notificações (como `"Erro ao entrar com Google"`) não fechava o aviso no celular, e o usuário solicitou fechamento via gesto de arrastar (esquerda, direita, cima e baixo) em todas as notificações em celulares e notebooks touch, além de um guia para Lorrayne liberar o domínio no Firebase.
+- **Causa Raiz Verificada:** `css/animations.css` aplicava `.toast { animation: bounceIn ... !important; }`, sobrescrevendo `.toast.toast--dismissing` e impedindo o disparo de `animationend` em `js/toast.js` — deixando a notificação congelada na tela após o toque no `X`.
+- **Mudanças Realizadas (`fix/toast-dismiss-and-swipe`):**
+  - `css/animations.css`, `css/components.css`, `js/toast.js`: remoção do `!important` conflitante, fallback temporizado de remoção em `dismiss()`, pausa em hover apenas para `pointerType === 'mouse'`, área de toque ampliada (`44x44px`) em `.toast-close`, e suporte completo a swipe em 4 direções (`touch-action: none` + `PointerEvent`).
+  - `js/login.js`, `*.html`: tratamento explícito de `auth/unauthorized-domain` e atualização de `components.css`/`animations.css` para `?v=1.3.7`.
+  - `docs/GUIA_DOMINIO_FIREBASE_LORRAYNE.md` e `tests/unit/toast.test.js`: guia passo a passo para configurar `nepotira.github.io` em `biblioteca-76f0c` e 6 novos testes unitários.
+- **Verificação:** `npm test` (`24/24` testes em 3 arquivos) e teste em Chrome Headless via CDP com emulação touch comprovando fechamento pelo `X` e arrasto para esquerda, direita, cima e baixo.
+
 ## 14 de Novembro de 2026 — Remoção de Artefato Retangular GPU no Hero Mobile (Safari/WebKit)
 - **Sintoma:** Captura em iOS Safari mostrava intermitentemente uma faixa retangular escura (`~40px` de expansão acima/lados do bloco de `#heroLogomarca`) entre o botão `"Explorar Biblioteca"` e o topo da flor.
 - **Causa Raiz Verificada:** `filter: drop-shadow(0 20px 40px ...)` combinado com `@keyframes floatIllustration` em `.hero-logomarca` sobre `.hero::before`/`.hero::after` (`filter: blur(50px/70px)`) gerava faixa/tile de recomposição retangular na GPU (WebKit CoreAnimation), além da presença de `\"` espúrio nos query strings `?v=1.3.5` dos HTMLs.

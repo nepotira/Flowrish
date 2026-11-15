@@ -7,6 +7,12 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 ### Corrigido
+- **Notificações / Toasts — Fechamento no `X` e Swipe 4 Direções (`js/toast.js`, `css/animations.css`, `css/components.css`, `js/login.js`, `*.html`):**
+  - Removida regra conflitante `.toast { animation: bounceIn ... !important; }` em `css/animations.css`, que sobrescrevia `.toast--dismissing` e impedia o evento `animationend` de remover a notificação ao clicar/tocar no botão `X`.
+  - Adicionado fallback temporizado (`setTimeout`) em `js/toast.js` para garantir a remoção mesmo com `prefers-reduced-motion: reduce`, ampliada a área de toque de `.toast-close` (`44x44px` via `::after`) e limitada a pausa de hover a `pointerType === 'mouse'`.
+  - Implementado gesto de arrastar (`PointerEvent` com `touch-action: none`) para dispensar qualquer notificação para cima, baixo, esquerda ou direita em telas touch (celulares e notebooks touch) e mouse.
+  - Adicionado mapeamento claro para `auth/unauthorized-domain` em `js/login.js` e cache-busting `?v=1.3.7` para `components.css` e `animations.css` nas 11 páginas HTML.
+  - Criado guia `docs/GUIA_DOMINIO_FIREBASE_LORRAYNE.md` explicando como autorizar `nepotira.github.io` no Firebase Auth/Firestore.
 - **Artefato Retangular no Hero Mobile / Safari WebKit (`css/pages/home.css`, `*.html`):**
   - Removido `filter: drop-shadow(...)` de `.hero-logomarca` (que estava combinado com a animação `@keyframes floatIllustration` e `filter: blur(...)` de `.hero::before`/`.hero::after`, provocando artefato de recorte/tiling retangular na GPU em Safari/iOS WebKit) e substituído por halo radial puro em `.hero-illustration::before` (`radial-gradient`) + `translate3d` e `backface-visibility: hidden`.
   - Substituído `filter: blur(...)` em `.hero::before`, `.hero::after` e `.cta-banner::before` por `radial-gradient(...)` suave sem passagens offscreen de blur.

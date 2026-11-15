@@ -77,41 +77,169 @@ export function showToast(titulo, texto = '', tipo = '', duracao = 4500) {
   `;
 
   let timeoutId = null;
+  let fallbackRemoveId = null;
   let remainingTime = duracao;
   let startTime = Date.now();
+  let dismissed = false;
 
-  const dismiss = () => {
-    if (toast.classList.contains('toast--dismissing')) return;
-    toast.classList.add('toast--dismissing');
-    clearTimeout(timeoutId);
-    toast.addEventListener('animationend', () => {
+  const finalizeRemove = () => {
+    clearTimeout(fallbackRemoveId);
+    if (toast.isConnected !== false) {
       toast.remove();
-      if (container && container.children.length === 0) {
-        container.remove();
-      }
-    }, { once: true });
+    }
+    if (container && container.children.length === 0) {
+      container.remove();
+    }
+  };
+
+  const dismiss = (swipeVector = null) => {
+    if (dismissed) return;
+    dismissed = true;
+    clearTimeout(timeoutId);
+    toast.classList.remove('toast--swiping');
+
+    if (swipeVector) {
+      toast.classList.add('toast--swiped');
+      toast.style.animation = 'none';
+      toast.style.transition = 'transform 0.22s cubic-bezier(0.4, 0, 1, 1), opacity 0.2s ease';
+      toast.style.transform = `translate3d(${Math.round(swipeVector.x)}px, ${Math.round(swipeVector.y)}px, 0) scale(0.95)`;
+      toast.style.opacity = '0';
+      toast.addEventListener('transitionend', finalizeRemove, { once: true });
+    } else {
+      toast.style.animation = '';
+      toast.style.transition = '';
+      toast.style.transform = '';
+      toast.style.opacity = '';
+      toast.classList.add('toast--dismissing');
+      toast.addEventListener('animationend', finalizeRemove, { once: true });
+    }
+
+    // Garantia de remoção caso animação/transição seja desativada (ex: prefers-reduced-motion)
+    fallbackRemoveId = setTimeout(finalizeRemove, 300);
   };
 
   const startTimer = () => {
+    clearTimeout(timeoutId);
+    if (dismissed || remainingTime <= 0) return;
     startTime = Date.now();
-    timeoutId = setTimeout(dismiss, remainingTime);
+    timeoutId = setTimeout(() => dismiss(), remainingTime);
   };
 
   const pauseTimer = () => {
     clearTimeout(timeoutId);
-    remainingTime -= (Date.now() - startTime);
+    remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
   };
 
-  toast.querySelector('.toast-close')?.addEventListener('click', (e) => {
+  const closeBtn = toast.querySelector('.toast-close');
+  closeBtn?.addEventListener('pointerdown', (e) => {
+    e.stopPropagation();
+  });
+  closeBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     dismiss();
   });
 
-  toast.addEventListener('mouseenter', pauseTimer);
-  toast.addEventListener('mouseleave', () => {
-    if (remainingTime > 0) startTimer();
-    else dismiss();
+  // Pausa apenas com hover real de mouse (evita travar em toque no iOS Safari)
+  toast.addEventListener('pointerenter', (e) => {
+    if (e.pointerType === 'mouse' && !dismissed) pauseTimer();
   });
+  toast.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'mouse' && !dismissed && !isDragging) {
+      if (remainingTime > 0) startTimer();
+      else dismiss();
+    }
+  });
+
+  // Gestos de arrastar (touch, caneta ou mouse) para qualquer direção: esquerda, direita, cima ou baixo
+  let isDragging = false;
+  let hasMoved = false;
+  let activePointerId = null;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let dragTime = 0;
+  let dx = 0;
+  let dy = 0;
+
+  const computeSwipeExitVector = (deltaX, deltaY) => {
+    const dist = Math.hypot(deltaX, deltaY) || 1;
+    const ux = deltaX / dist;
+    const uy = deltaY / dist;
+    const minOutX = Math.max(toast.offsetWidth || 260, 220);
+    const minOutY = Math.max((toast.offsetHeight || 90) + 60, 140);
+    const push = Math.abs(ux) >= Math.abs(uy) ? minOutX : minOutY;
+    return { x: ux * push, y: uy * push };
+  };
+
+  toast.addEventListener('pointerdown', (e) => {
+    if (dismissed) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    if (e.target && e.target.closest?.('.toast-close')) return;
+
+    isDragging = true;
+    hasMoved = false;
+    activePointerId = e.pointerId;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragTime = Date.now();
+    dx = 0;
+    dy = 0;
+    pauseTimer();
+  });
+
+  toast.addEventListener('pointermove', (e) => {
+    if (!isDragging || e.pointerId !== activePointerId || dismissed) return;
+    dx = e.clientX - dragStartX;
+    dy = e.clientY - dragStartY;
+    const dist = Math.hypot(dx, dy);
+
+    if (!hasMoved && dist > 4) {
+      hasMoved = true;
+      toast.classList.add('toast--swiping');
+      toast.style.animation = 'none';
+      toast.style.transition = 'none';
+      try { toast.setPointerCapture?.(e.pointerId); } catch {}
+    }
+
+    if (hasMoved) {
+      toast.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+      toast.style.opacity = String(Math.max(0.2, 1 - dist / 160));
+    }
+  });
+
+  const handlePointerEnd = (e, cancelled = false) => {
+    if (!isDragging || e.pointerId !== activePointerId) return;
+    isDragging = false;
+    activePointerId = null;
+
+    if (hasMoved) {
+      try { toast.releasePointerCapture?.(e.pointerId); } catch {}
+    }
+    toast.classList.remove('toast--swiping');
+
+    if (dismissed) return;
+
+    const dist = Math.hypot(dx, dy);
+    const elapsed = Math.max(1, Date.now() - dragTime);
+    const velocity = dist / elapsed;
+    const shouldDismiss = !cancelled && hasMoved && (dist >= 44 || (dist >= 20 && velocity >= 0.38));
+
+    if (shouldDismiss) {
+      dismiss(computeSwipeExitVector(dx, dy));
+      return;
+    }
+
+    if (hasMoved) {
+      toast.style.transition = 'transform 0.24s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.2s ease';
+      toast.style.transform = 'translate3d(0, 0, 0)';
+      toast.style.opacity = '1';
+    }
+
+    remainingTime = Math.max(remainingTime, 1200);
+    startTimer();
+  };
+
+  toast.addEventListener('pointerup', (e) => handlePointerEnd(e, false));
+  toast.addEventListener('pointercancel', (e) => handlePointerEnd(e, true));
 
   // Limite de até 3 toasts simultâneos
   while (container.children.length >= 3) {
