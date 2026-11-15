@@ -14,6 +14,7 @@ function mensagemErro(err) {
     'auth/wrong-password': 'Senha incorreta.',
     'auth/too-many-requests': 'Muitas tentativas. Aguarde um pouco e tente novamente.',
     'auth/popup-closed-by-user': 'Login cancelado.',
+    'auth/unauthorized-domain': 'Este domínio ainda não foi autorizado no Firebase Auth.',
   };
   return map[err?.code] || 'Não foi possível entrar. Verifique os dados e tente novamente.';
 }

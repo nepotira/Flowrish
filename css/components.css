@@ -1009,10 +1009,28 @@ html[data-theme="light"] .logo-dark {
   will-change: transform, opacity;
   position: relative;
   overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+
+.toast:active {
+  cursor: grabbing;
+}
+
+.toast.toast--swiping {
+  animation: none;
+  transition: none;
 }
 
 .toast.toast--dismissing {
   animation: toastSlideUpFade 0.24s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.toast.toast--swiped {
+  animation: none;
+  pointer-events: none;
 }
 
 /* Indicador de acento lateral */
@@ -1064,21 +1082,35 @@ html[data-theme="light"] .logo-dark {
 }
 
 .toast-close {
+  position: relative;
+  z-index: 2;
   flex-shrink: 0;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.09);
   color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  touch-action: manipulation;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   padding: 0;
-  margin-top: 5px;
+  margin-top: 2px;
   margin-left: 2px;
+}
+
+/* Área de toque expandida (44x44px) sem aumentar o círculo visual */
+.toast-close::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+}
+
+.toast-close svg {
+  pointer-events: none;
 }
 
 .toast-close:hover {
@@ -1199,7 +1231,7 @@ html[data-theme="light"] .toast--info .toast-icon-badge {
   0% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    max-height: 120px;
+    max-height: 240px;
     margin-bottom: 0;
   }
   100% {

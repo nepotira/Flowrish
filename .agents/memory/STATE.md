@@ -3,7 +3,7 @@
 > **Última atualização:** 14/11/2026  
 > **Versão:** 1.3.0 (Claymorphism Soft 3D Integral & Correção Mobile Completa)  
 > **Repositório Primário:** `nepotira/Flowrish` (independente, não-fork)  
-> **Testes Unitários:** 18/18 Aprovados (Vitest)  
+> **Testes Unitários:** 24/24 Aprovados (Vitest)  
 > **Ambiente Operacional:** Linux Ubuntu 24.04 & Windows 11  
 > **Persistência:** Firebase Auth + Cloud Firestore (`biblioteca-76f0c`)  
 > **Referência Detalhada:** `docs/PROJECT_STATE.md` e `CHANGELOG.md`

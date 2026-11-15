@@ -344,10 +344,7 @@
 .modal-overlay { animation: fadeIn 0.22s cubic-bezier(0.4, 0, 0.2, 1) both; }
 .modal-card    { animation: slideInUp 0.32s cubic-bezier(0.34, 1.2, 0.64, 1) both; }
 
-/* ---- Toast ---- */
-.toast {
-  animation: bounceIn 0.4s cubic-bezier(0.34, 1.5, 0.64, 1) both !important;
-}
+/* Nota: animação de entrada/saída e swipe do .toast é controlada em css/components.css + js/toast.js */
 
 /* ---- Dropdown / Notif panel ---- */
 .dropdown-menu, .notif-panel {
