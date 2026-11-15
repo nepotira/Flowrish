@@ -7,6 +7,10 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 ### Corrigido
+- **Artefato Retangular no Hero Mobile / Safari WebKit (`css/pages/home.css`, `*.html`):**
+  - Removido `filter: drop-shadow(...)` de `.hero-logomarca` (que estava combinado com a animação `@keyframes floatIllustration` e `filter: blur(...)` de `.hero::before`/`.hero::after`, provocando artefato de recorte/tiling retangular na GPU em Safari/iOS WebKit) e substituído por halo radial puro em `.hero-illustration::before` (`radial-gradient`) + `translate3d` e `backface-visibility: hidden`.
+  - Substituído `filter: blur(...)` em `.hero::before`, `.hero::after` e `.cta-banner::before` por `radial-gradient(...)` suave sem passagens offscreen de blur.
+  - Removida barra invertida espúria (`\"`) nas tags `<link rel="stylesheet" href="...?v=1.3.5">` das 11 páginas HTML e incrementado `home.css` para `?v=1.3.6` em `index.html`.
 - **Responsividade Mobile & Overflow Horizontal (`320px`–`960px`):**
   - Corrigido recorte do botão de menu (`≡`) fora da viewport no cabeçalho mobile (`css/components.css`, `css/variables.css`) com `--header-h: 68px` em `<= 640px`, `justify-content: space-between`, redução proporcional do logotipo (`32px`/`28px`) e botões compactos (`36px`–`40px`).
   - Corrigido seletor `.nav-search { display: none; }` para `.navbar .nav-search { display: none; }`, restaurando a barra de busca dentro da gaveta mobile (`.mobile-drawer .mobile-search`).

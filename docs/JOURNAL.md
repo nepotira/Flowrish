@@ -1,5 +1,12 @@
 # Diário de Bordo — Flowrish
 
+## 14 de Novembro de 2026 — Remoção de Artefato Retangular GPU no Hero Mobile (Safari/WebKit)
+- **Sintoma:** Captura em iOS Safari mostrava intermitentemente uma faixa retangular escura (`~40px` de expansão acima/lados do bloco de `#heroLogomarca`) entre o botão `"Explorar Biblioteca"` e o topo da flor.
+- **Causa Raiz Verificada:** `filter: drop-shadow(0 20px 40px ...)` combinado com `@keyframes floatIllustration` em `.hero-logomarca` sobre `.hero::before`/`.hero::after` (`filter: blur(50px/70px)`) gerava faixa/tile de recomposição retangular na GPU (WebKit CoreAnimation), além da presença de `\"` espúrio nos query strings `?v=1.3.5` dos HTMLs.
+- **Mudanças Realizadas (`fix/hero-safari-shadow-glitch`):**
+  - `css/pages/home.css`: removido `filter: drop-shadow(...)` de `.hero-logomarca` (claro e escuro), adicionado halo radial puro sem `filter` em `.hero-illustration::before`, `translate3d`/`backface-visibility: hidden` na animação, e convertido `filter: blur(...)` de `.hero::before`, `.hero::after` e `.cta-banner::before` para `radial-gradient(...)`.
+  - `*.html` e `index.html`: limpo `?v=1.3.5"` em todas as 11 páginas e elevado `home.css` para `?v=1.3.6`.
+
 ## 14 de Novembro de 2026 — Correção Completa da Interface Mobile e Eliminação de Overflow Horizontal
 - **Contexto:** Relato visual com capturas reais do site publicado em `nepotira.github.io/Flowrish` mostrando o botão de menu (`≡`) cortado à direita do cabeçalho em telas estreitas e possíveis desalinhamentos em outros viewports móveis.
 - **Diagnóstico e Causa Raiz (Auditoria via Headless Chrome CDP):**
