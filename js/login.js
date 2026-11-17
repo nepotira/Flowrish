@@ -14,7 +14,9 @@ function mensagemErro(err) {
     'auth/wrong-password': 'Senha incorreta.',
     'auth/too-many-requests': 'Muitas tentativas. Aguarde um pouco e tente novamente.',
     'auth/popup-closed-by-user': 'Login cancelado.',
+    'auth/cancelled-popup-request': 'Login cancelado.',
     'auth/unauthorized-domain': 'Este domínio ainda não foi autorizado no Firebase Auth.',
+    'auth/operation-not-allowed': 'Login com Google ainda não está ativado no Firebase Auth.',
   };
   return map[err?.code] || 'Não foi possível entrar. Verifique os dados e tente novamente.';
 }
@@ -37,13 +39,17 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   }
 });
 
-document.getElementById('googleLoginBtn').addEventListener('click', async () => {
+const googleBtn = document.getElementById('googleLoginBtn');
+googleBtn.addEventListener('click', async () => {
+  googleBtn.disabled = true;
   try {
-    await loginWithGoogle();
+    const user = await loginWithGoogle();
+    if (!user) return;
     showToast('Login com Google', 'Conta conectada com sucesso.');
     setTimeout(() => window.location.href = 'perfil.html', 500);
   } catch (err) {
     showToast('Erro ao entrar com Google', mensagemErro(err));
+    googleBtn.disabled = false;
   }
 });
 

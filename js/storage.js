@@ -42,6 +42,7 @@ onAuthStateChanged(auth, async (user) => {
     cachedSession = null;
     cachedFavorites = new Set();
   } else {
+    await redirectReady;
     const ref = doc(db, 'users', user.uid);
     let snap = await getDoc(ref);
     if (!snap.exists()) {
@@ -114,8 +115,8 @@ async function ensureGoogleUserDoc(user) {
 }
 
 // Alguns navegadores/extensões bloqueiam o popup do Google (auth/popup-blocked).
-// Nesses casos caímos para o fluxo de redirecionamento; o retorno é tratado
-// pelo getRedirectResult logo abaixo, que roda assim que o módulo carrega.
+// Nesses casos caímos para o fluxo de redirecionamento; o retorno é aguardado
+// em redirectReady antes de authReady concluir.
 export async function loginWithGoogle() {
   const provider = new GoogleAuthProvider();
   try {
@@ -123,7 +124,7 @@ export async function loginWithGoogle() {
     await ensureGoogleUserDoc(cred.user);
     return cred.user;
   } catch (err) {
-    if (['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(err.code)) {
+    if (err?.code === 'auth/popup-blocked') {
       await signInWithRedirect(auth, provider);
       return null;
     }
@@ -131,7 +132,7 @@ export async function loginWithGoogle() {
   }
 }
 
-getRedirectResult(auth).then((result) => {
+const redirectReady = getRedirectResult(auth).then((result) => {
   if (result?.user) return ensureGoogleUserDoc(result.user);
 }).catch(() => {});
 
