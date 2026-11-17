@@ -237,7 +237,7 @@ export function renderFooter() {
           <div class="footer-col">
             <h4>Legal</h4>
             <a href="ajuda.html">Central de ajuda</a>
-            <a href="assets/termos.pdf" target="_blank" rel="noopener">Termos de uso e privacidade (PDF)</a>
+            <a href="assets/termos.pdf" target="_blank" rel="noopener">Termos de uso e privacidade</a>
           </div>
         </div>
         <div class="footer-bottom">

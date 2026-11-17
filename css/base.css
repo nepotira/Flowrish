@@ -9,6 +9,10 @@ html {
   scroll-padding-top: calc(var(--header-h, 84px) + 16px);
   overflow-x: clip;
   max-width: 100%;
+  color-scheme: dark;
+}
+html[data-theme="light"] {
+  color-scheme: light;
 }
 
 body {
@@ -99,16 +103,23 @@ input, select, textarea, button {
 }
 
 .skip-link {
-  position: absolute;
-  left: 12px; top: -60px;
+  position: fixed;
+  left: 12px;
+  top: -120px;
   background: var(--primary);
   color: var(--on-primary);
   padding: 10px 18px;
   border-radius: var(--radius-md);
-  z-index: 1000;
-  transition: top 0.2s ease;
+  z-index: 1100;
+  opacity: 0;
+  pointer-events: none;
+  transition: top 0.2s ease, opacity 0.2s ease;
 }
-.skip-link:focus { top: 12px; }
+.skip-link:focus-visible {
+  top: 12px;
+  opacity: 1;
+  pointer-events: auto;
+}
 
 :focus-visible {
   outline: 3px solid var(--primary);
@@ -304,6 +315,33 @@ html[data-theme="light"] .btn-secondary:hover {
   background: #3B3C23;
   box-shadow: 0 0 0 4px rgba(223, 148, 157, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.25);
   outline: none;
+}
+
+select option {
+  background-color: var(--surface-card, var(--verde-oliva-dark));
+  color: var(--text);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--text) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-input, var(--verde-oliva-dark)) inset !important;
+  box-shadow: 0 0 0 1000px var(--surface-input, var(--verde-oliva-dark)) inset !important;
+  caret-color: var(--text);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+[data-theme="light"] input:-webkit-autofill,
+[data-theme="light"] input:-webkit-autofill:hover,
+[data-theme="light"] input:-webkit-autofill:focus,
+[data-theme="light"] textarea:-webkit-autofill,
+[data-theme="light"] select:-webkit-autofill {
+  -webkit-text-fill-color: var(--text) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-input, #FFFFFF) inset !important;
+  box-shadow: 0 0 0 1000px var(--surface-input, #FFFFFF) inset !important;
 }
 textarea.input { resize: vertical; min-height: 110px; }
 
