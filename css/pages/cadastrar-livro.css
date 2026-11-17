@@ -440,7 +440,20 @@
   color: var(--text-muted);
 }
 
+.anunciar-card .custom-select {
+  position: relative;
+}
+
 .anunciar-card .custom-select-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 8px;
   background: var(--surface-card);
   border: 1.5px solid var(--border);
   border-radius: 20px;
@@ -449,11 +462,34 @@
   font-family: var(--font-body);
 }
 
+.anunciar-card .custom-select-panel.open {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.anunciar-card .custom-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  margin: 0;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
 .anunciar-card .custom-select-option:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
 .anunciar-card .custom-select-option input {
+  flex: none;
+  margin: 0;
   accent-color: var(--primary);
 }
 
