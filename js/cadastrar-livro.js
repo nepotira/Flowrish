@@ -197,17 +197,55 @@ document.getElementById('isbnSearchBtn').addEventListener('click', async () => {
 
 // Upload de fotos — comprime para caber no limite de 1MB por documento do Firestore
 const photoGrid = document.getElementById('photoGrid');
+const photoDropZone = document.getElementById('photoDropZone');
 const photoInput = document.getElementById('photoInput');
 const photos = [];
 
-photoInput.addEventListener('change', async (e) => {
-  for (const file of e.target.files) {
+async function addPhotoFiles(fileList) {
+  let ignorados = 0;
+  for (const file of fileList) {
+    if (file.type && !file.type.startsWith('image/')) {
+      ignorados++;
+      continue;
+    }
     try {
       photos.push(await compressImage(file));
       renderPhotoGrid();
     } catch { /* ignora arquivo que falhar ao processar */ }
   }
+  if (ignorados > 0) {
+    showToast('Arquivo inválido', 'Envie apenas arquivos de imagem (JPG, PNG ou WebP).', 'warning');
+  }
+}
+
+photoInput.addEventListener('change', async (e) => {
+  await addPhotoFiles(e.target.files);
   photoInput.value = '';
+});
+
+['dragenter', 'dragover'].forEach((ev) => {
+  photoDropZone.addEventListener(ev, (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    photoDropZone.classList.add('is-dragover');
+  });
+});
+
+photoDropZone.addEventListener('dragleave', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!photoDropZone.contains(e.relatedTarget)) {
+    photoDropZone.classList.remove('is-dragover');
+  }
+});
+
+photoDropZone.addEventListener('drop', async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  photoDropZone.classList.remove('is-dragover');
+  if (e.dataTransfer?.files?.length) {
+    await addPhotoFiles(e.dataTransfer.files);
+  }
 });
 
 function renderPhotoGrid() {
