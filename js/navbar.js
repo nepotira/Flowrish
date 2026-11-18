@@ -1,6 +1,7 @@
 import { getSession, logout } from './storage.js';
 import { openModal } from './modal.js';
 import { getTheme, toggleTheme, initTheme } from './theme.js';
+import { escapeHTML, safeImgUrl } from './validators.js';
 
 const NAV_LINKS = [
   { href: 'index.html', label: 'Início' },
@@ -40,8 +41,8 @@ export function renderNavbar(activePage = '') {
     ? `
       <div class="user-menu">
         <button class="user-avatar-btn" id="userMenuBtn">
-          <img src="${session.foto}" alt="" width="32" height="32">
-          <span>${session.nome.split(' ')[0]}</span>
+          <img src="${escapeHTML(safeImgUrl(session.foto, 'assets/default-avatar.svg'))}" alt="" width="32" height="32" onerror="this.src='assets/default-avatar.svg'">
+          <span>${escapeHTML((session.nome || 'Leitor').split(' ')[0])}</span>
         </button>
         <div class="dropdown-menu user-dropdown" id="userDropdown">
           <a href="perfil.html">Perfil</a>

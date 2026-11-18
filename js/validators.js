@@ -22,6 +22,26 @@ export function isValidTelefone(value) {
   return n === 10 || n === 11;
 }
 
+// Sanitização de texto para innerHTML e validação de URLs de mídia (sem DOM).
+export function escapeHTML(value) {
+  if (value === null || value === undefined) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function safeImgUrl(url, fallback = 'assets/sem-capa.svg') {
+  if (typeof url !== 'string') return fallback;
+  const trimmed = url.trim();
+  if (/^(https?:\/\/|assets\/|data:image\/[a-z0-9.+-]+[;,])/i.test(trimmed)) {
+    return trimmed;
+  }
+  return fallback;
+}
+
 // Conversa no WhatsApp com o número (brasileiro, +55) e a mensagem já escrita.
 export function whatsappUrl(telefone, mensagem = '') {
   const texto = mensagem ? `?text=${encodeURIComponent(mensagem)}` : '';

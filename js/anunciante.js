@@ -2,6 +2,7 @@ import { getOwnerInfo, getBooksByOwner, authReady } from './storage.js';
 import { renderNavbar, renderFooter } from './navbar.js';
 import { renderBookGrid } from './book-card.js';
 import { renderAvaliacoes } from './reviews.js';
+import { escapeHTML, safeImgUrl } from './validators.js';
 
 await authReady;
 renderNavbar('biblioteca.html');
@@ -27,10 +28,10 @@ if (!owner?.id) {
 
   root.innerHTML = `
     <header class="sl-header">
-      <img class="sl-avatar" src="${owner.foto}" alt="Foto de ${owner.nome}">
+      <img class="sl-avatar" src="${escapeHTML(safeImgUrl(owner.foto, 'assets/default-avatar.svg'))}" alt="Foto de ${escapeHTML(owner.nome)}" onerror="this.src='assets/default-avatar.svg'">
       <div>
-        <h1 class="sl-name">${owner.nome}</h1>
-        ${localizacao ? `<p class="sl-location">${localizacao}</p>` : ''}
+        <h1 class="sl-name">${escapeHTML(owner.nome)}</h1>
+        ${localizacao ? `<p class="sl-location">${escapeHTML(localizacao)}</p>` : ''}
         <ul class="sl-stats">
           <li><strong>${books.length}</strong> ${books.length === 1 ? 'livro anunciado' : 'livros anunciados'}</li>
           <li class="sl-score" data-score></li>

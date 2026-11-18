@@ -1,4 +1,4 @@
-import { GENEROS, ESTADOS_CONSERVACAO } from './data.js';
+import { GENEROS, ESTADOS_CONSERVACAO, bookGeneros } from './data.js';
 import { getAllBooks, getOwnerInfo, authReady } from './storage.js';
 import { renderNavbar, renderFooter } from './navbar.js';
 import { ESTADOS_BR, NOMES_ESTADOS } from './auth.js';
@@ -29,7 +29,7 @@ if (state.nome) document.getElementById('fNome').value = state.nome;
 
 // Renderiza chips de filtro
 function renderChips(container, values, stateKey) {
-  container.innerHTML += values.map(v => `<button class="filter-chip" data-value="${v}">${v}</button>`).join('');
+  container.innerHTML = values.map(v => `<button class="filter-chip" data-value="${v}">${v}</button>`).join('');
   container.querySelectorAll('.filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const value = chip.dataset.value;
@@ -88,7 +88,7 @@ function applyFilters() {
     const q = state.nome.toLowerCase();
     books = books.filter(b => b.titulo.toLowerCase().includes(q) || b.autor.toLowerCase().includes(q));
   }
-  if (state.genero) books = books.filter(b => b.generos.includes(state.genero));
+  if (state.genero) books = books.filter(b => bookGeneros(b).includes(state.genero));
   if (state.conservacao) books = books.filter(b => b.estadoConservacao === state.conservacao);
   if (state.origem) books = books.filter(b => b.nacionalidade === state.origem);
   if (state.estado) books = books.filter(b => ownerMap.get(b.ownerId)?.estado === state.estado);

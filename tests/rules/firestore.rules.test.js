@@ -78,11 +78,15 @@ describe('livros (books)', () => {
     await assertSucceeds(setDoc(doc(dbAs(LORRANY), 'books', 'b2'), { titulo: 'X', ownerId: LORRANY }));
     await assertFails(setDoc(doc(dbAs(LORRANY), 'books', 'b3'), { titulo: 'X', ownerId: ARTHUR }));
   });
-  it('outro usuário só pode mexer em curtidas; o dono não troca o ownerId', async () => {
+  it('outro usuário só pode mexer em curtidas de 1 em 1; o dono não troca o ownerId nem forja curtidas', async () => {
     await assertSucceeds(updateDoc(doc(dbAs(LORRANY), 'books', 'b1'), { curtidas: 1 }));
+    await assertSucceeds(updateDoc(doc(dbAs(LORRANY), 'books', 'b1'), { curtidas: 0 }));
+    await assertFails(updateDoc(doc(dbAs(LORRANY), 'books', 'b1'), { curtidas: 9999 }));
+    await assertFails(updateDoc(doc(dbAs(LORRANY), 'books', 'b1'), { curtidas: -1 }));
     await assertFails(updateDoc(doc(dbAs(LORRANY), 'books', 'b1'), { titulo: 'hack' }));
     await assertSucceeds(updateDoc(doc(dbAs(ARTHUR), 'books', 'b1'), { titulo: 'Novo título' }));
     await assertFails(updateDoc(doc(dbAs(ARTHUR), 'books', 'b1'), { ownerId: LORRANY }));
+    await assertFails(setDoc(doc(dbAs(LORRANY), 'books', 'b_fake'), { titulo: 'Fake', ownerId: LORRANY, curtidas: 9999 }));
   });
   it('só o dono apaga', async () => {
     await assertFails(deleteDoc(doc(dbAs(LORRANY), 'books', 'b1')));

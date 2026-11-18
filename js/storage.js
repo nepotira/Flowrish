@@ -197,7 +197,16 @@ export async function excluirConta() {
   await Promise.all([...livros.docs, ...favoritos.docs, ...avaliacoes.docs].map(d => deleteDoc(d.ref)));
   await deleteDoc(contatoRef(uid));
   await deleteDoc(doc(db, 'users', uid));
-  await deleteUser(cachedUser);
+  try {
+    await deleteUser(cachedUser);
+  } catch (err) {
+    if (err?.code === 'auth/requires-recent-login') {
+      const e = new Error('Por segurança, saia e entre de novo na sua conta antes de excluí-la.');
+      e.code = 'precisa-login-recente';
+      throw e;
+    }
+    throw err;
+  }
 }
 
 // -------- Favoritos --------
