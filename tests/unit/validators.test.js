@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { maskTelefone, isValidTelefone, whatsappUrl } from '../../js/validators.js';
+import { maskTelefone, isValidTelefone, whatsappUrl, escapeHTML, safeImgUrl } from '../../js/validators.js';
 
 describe('telefone (WhatsApp)', () => {
   it('formata celular e fixo', () => {
@@ -28,5 +28,23 @@ describe('link do WhatsApp', () => {
   });
   it('sem mensagem, só abre a conversa', () => {
     expect(whatsappUrl('11999998888')).toBe('https://wa.me/5511999998888');
+  });
+});
+
+describe('sanitização HTML e URLs (escapeHTML & safeImgUrl)', () => {
+  it('escapa payloads XSS em campos de livros e perfis', () => {
+    expect(escapeHTML('<img src=x onerror=alert(1)>')).toBe('&lt;img src=x onerror=alert(1)&gt;');
+    expect(escapeHTML(`"Tom & Jerry" '26`)).toBe('&quot;Tom &amp; Jerry&quot; &#39;26');
+    expect(escapeHTML(null)).toBe('');
+    expect(escapeHTML(undefined)).toBe('');
+    expect(escapeHTML(2026)).toBe('2026');
+  });
+
+  it('bloqueia esquemas perigosos em URLs de imagem e aceita fontes confiáveis', () => {
+    expect(safeImgUrl('javascript:alert(1)')).toBe('assets/sem-capa.svg');
+    expect(safeImgUrl('data:text/html,<script>alert(1)</script>')).toBe('assets/sem-capa.svg');
+    expect(safeImgUrl('https://books.google.com/cover.jpg')).toBe('https://books.google.com/cover.jpg');
+    expect(safeImgUrl('assets/default-avatar.svg', 'assets/default-avatar.svg')).toBe('assets/default-avatar.svg');
+    expect(safeImgUrl('data:image/jpeg;base64,/9j/4AAQ')).toBe('data:image/jpeg;base64,/9j/4AAQ');
   });
 });

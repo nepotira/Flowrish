@@ -48,6 +48,11 @@ form.addEventListener('submit', async (e) => {
   const hint = document.getElementById('confirmarNovaSenhaHint');
   hint.style.display = 'none';
 
+  if (!novaSenha || !confirmarNovaSenha) {
+    showToast('Preencha todos os campos');
+    return;
+  }
+
   if (novaSenha !== confirmarNovaSenha) {
     hint.style.display = 'block';
     showToast('As senhas não coincidem', 'Digite a mesma senha nos dois campos.');

@@ -48,8 +48,8 @@ export function openForgotPasswordModal(sendPasswordReset) {
   openModal(`
     <h3 id="forgotTitle" class="senha-modal-titulo">Recuperar a senha</h3>
     <p class="senha-modal-texto">Informe o mesmo email cadastrado na sua conta e enviaremos um link para redefinir a senha.</p>
-    <form id="forgotForm">
-      <input class="senha-modal-input" type="email" id="forgotEmail" required aria-label="Email" autocomplete="email">
+    <form id="forgotForm" novalidate>
+      <input class="senha-modal-input" type="email" id="forgotEmail" required aria-label="Email" autocomplete="email" placeholder="seu@email.com">
       <button type="submit" class="senha-modal-enviar">Enviar</button>
     </form>
     <p class="senha-modal-obs">Não recebeu o email? Verifique sua caixa de spam.</p>
@@ -57,6 +57,10 @@ export function openForgotPasswordModal(sendPasswordReset) {
     overlay.querySelector('#forgotForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = overlay.querySelector('#forgotEmail').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+$/.test(email)) {
+        showToast('Email inválido', 'Informe o email cadastrado, como nome@exemplo.com.');
+        return;
+      }
       try {
         await sendPasswordReset(email);
         close();

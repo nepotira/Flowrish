@@ -55,13 +55,25 @@ service cloud.firestore {
     }
 
     // Livros anunciados: leitura pública (é a biblioteca), só o dono cria,
-    // edita e apaga. Outros usuários só mexem nas curtidas.
+    // edita e apaga. Outros usuários só alteram curtidas de 1 em 1.
     match /books/{bookId} {
+      function b() { return request.resource.data; }
+      function prevCurtidas() {
+        return ('curtidas' in resource.data && resource.data.curtidas is int) ? resource.data.curtidas : 0;
+      }
+      function validCurtidasDelta() {
+        return b().curtidas is int &&
+          b().curtidas >= 0 &&
+          (b().curtidas == prevCurtidas() + 1 || b().curtidas == prevCurtidas() - 1);
+      }
       allow read: if true;
-      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      allow create: if request.auth != null &&
+        b().ownerId == request.auth.uid &&
+        b().titulo is string && b().titulo.size() > 0 && b().titulo.size() <= 200 &&
+        (!('curtidas' in b()) || b().curtidas == 0);
       allow update: if request.auth != null && (
-        (resource.data.ownerId == request.auth.uid && !mudou().hasAny(['ownerId'])) ||
-        mudou().hasOnly(['curtidas'])
+        (resource.data.ownerId == request.auth.uid && !mudou().hasAny(['ownerId', 'curtidas'])) ||
+        (mudou().hasOnly(['curtidas']) && validCurtidasDelta())
       );
       allow delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
     }

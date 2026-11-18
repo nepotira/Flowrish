@@ -8,7 +8,7 @@ await authReady;
 renderNavbar('index.html');
 renderFooter();
 
-const featured = await getMostLikedBooks(6);
+const featured = await getMostLikedBooks(5);
 const featuredTrack = document.getElementById('featuredBooks');
 await renderBookGrid(featuredTrack, featured, 'Ainda não há livros cadastrados para destaque.');
 

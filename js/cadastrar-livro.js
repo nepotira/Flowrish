@@ -334,6 +334,18 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
     return;
   }
 
+  const anoRaw = document.getElementById('ano').value.trim();
+  if (anoRaw && (!Number.isInteger(book.ano) || book.ano < 1400 || book.ano > 2100)) {
+    showToast('Ano inválido', 'Informe um ano de edição entre 1400 e 2100.', 'warning');
+    return;
+  }
+
+  const paginasRaw = document.getElementById('paginas').value.trim();
+  if (paginasRaw && (!Number.isInteger(book.paginas) || book.paginas < 1)) {
+    showToast('Número de páginas inválido', 'Informe pelo menos 1 página.', 'warning');
+    return;
+  }
+
   if (!book.observacoes && !book.semDanificacoes) {
     showToast('Descreva o estado do livro', 'Preencha as observações ou marque "Sem danificações relevantes".');
     return;

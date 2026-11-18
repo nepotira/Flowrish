@@ -44,7 +44,10 @@ googleBtn.addEventListener('click', async () => {
   googleBtn.disabled = true;
   try {
     const user = await loginWithGoogle();
-    if (!user) return;
+    if (!user) {
+      setTimeout(() => { googleBtn.disabled = false; }, 4000);
+      return;
+    }
     showToast('Login com Google', 'Conta conectada com sucesso.');
     setTimeout(() => window.location.href = 'perfil.html', 500);
   } catch (err) {

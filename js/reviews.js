@@ -1,6 +1,7 @@
 import { getPublicReviews, saveRating, replyRating, getSession, isLoggedIn } from './storage.js';
 import { openModal } from './modal.js';
 import { showToast } from './toast.js';
+import { escapeHTML, safeImgUrl } from './validators.js';
 
 // Avaliações de perfil no painel oliva (página do livro e perfil do anunciante).
 // Qualquer pessoa logada avalia o perfil de outra uma única vez: nota de 1 a 5
@@ -10,7 +11,6 @@ import { showToast } from './toast.js';
 // e [data-avaliar]; renderAvaliacoes preenche e liga o botão.
 
 const ICONE_ESTRELA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" stroke-linejoin="round"/></svg>';
-const escapeHTML = (texto) => String(texto ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
 function starsHTML(rating) {
   const full = Math.round(rating);
@@ -47,7 +47,7 @@ function reviewsHTML(reviews, owner, souDono) {
   return reviews.map(r => `
     <article class="bk-review" data-autor="${escapeHTML(r.autorId)}">
       <div class="bk-review-head">
-        <a class="bk-review-foto" href="anunciante.html?id=${encodeURIComponent(r.autorId)}" aria-hidden="true" tabindex="-1"><img src="${escapeHTML(r.autor.foto)}" alt=""></a>
+        <a class="bk-review-foto" href="anunciante.html?id=${encodeURIComponent(r.autorId)}" aria-hidden="true" tabindex="-1"><img src="${escapeHTML(safeImgUrl(r.autor.foto, 'assets/default-avatar.svg'))}" alt=""></a>
         <span class="bk-review-autor">
           <a href="anunciante.html?id=${encodeURIComponent(r.autorId)}"><strong>${escapeHTML(r.autor.nome)}</strong></a>
           <span class="bk-stars" aria-label="Nota ${r.nota} de 5">${starsHTML(r.nota)}</span>

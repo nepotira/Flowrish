@@ -1,8 +1,9 @@
-import { GENEROS, ESTADOS_CONSERVACAO } from './data.js';
+import { GENEROS, ESTADOS_CONSERVACAO, bookGeneros } from './data.js';
 import { getSession, getMyBooks, authReady } from './storage.js';
 import { renderNavbar, renderFooter, requireLoginModal } from './navbar.js';
 import { PIN_ICON, initRevealAnimations } from './book-card.js';
 import { EDIT_ICON, TRASH_ICON, editarLivroUrl, confirmarExclusaoLivro } from './book-actions.js';
+import { escapeHTML, safeImgUrl } from './validators.js';
 
 // "Meu acervo": os livros que o usuário anunciou, com os filtros da Biblioteca.
 // O lápis abre o formulário de anúncio já preenchido (cadastrar-livro.html?editar=id),
@@ -54,22 +55,28 @@ filtersBtn.addEventListener('click', () => {
 });
 
 function acervoCardHTML(book) {
+  const titulo = escapeHTML(book.titulo);
+  const autor = escapeHTML(book.autor);
+  const capa = escapeHTML(safeImgUrl(book.capa, 'assets/sem-capa.svg'));
+  const conservacao = escapeHTML(book.estadoConservacao);
+  const generosHTML = bookGeneros(book).map(g => `<span class="badge badge-brown">${escapeHTML(g)}</span>`).join('');
+  const local = escapeHTML(session.cidade || session.estado || '—');
   return `
-    <article class="card book-card acervo-card reveal" data-book-id="${book.id}" tabindex="0" role="link" aria-label="Ver ${book.titulo}">
+    <article class="card book-card acervo-card reveal" data-book-id="${escapeHTML(book.id)}" tabindex="0" role="link" aria-label="Ver ${titulo}">
       <div class="book-cover">
-        <img src="${book.capa}" alt="Capa do livro ${book.titulo}" loading="lazy" onerror="this.src='https://placehold.co/300x420/A8CFA8/2F4A2F?text=Sem+capa'">
-        <span class="badge condition-tag">${book.estadoConservacao}</span>
+        <img src="${capa}" alt="Capa do livro ${titulo}" loading="lazy" onerror="this.src='assets/sem-capa.svg'">
+        <span class="badge condition-tag">${conservacao}</span>
       </div>
       <div class="book-info">
-        <h3 class="book-title">${book.titulo}</h3>
-        <p class="book-author">${book.autor}</p>
+        <h3 class="book-title">${titulo}</h3>
+        <p class="book-author">${autor}</p>
         <div class="book-meta">
-          ${book.generos.map(g => `<span class="badge badge-brown">${g}</span>`).join('')}
+          ${generosHTML}
         </div>
-        <p class="book-interest">${PIN_ICON} ${session.estado || '—'}</p>
+        <p class="book-interest">${PIN_ICON} ${local}</p>
         <div class="acervo-actions">
-          <a class="acervo-btn" href="${editarLivroUrl(book)}" data-edit aria-label="Editar ${book.titulo}">${EDIT_ICON}</a>
-          <button type="button" class="acervo-btn acervo-btn-delete" data-delete aria-label="Excluir ${book.titulo}">${TRASH_ICON}</button>
+          <a class="acervo-btn" href="${editarLivroUrl(book)}" data-edit aria-label="Editar ${titulo}">${EDIT_ICON}</a>
+          <button type="button" class="acervo-btn acervo-btn-delete" data-delete aria-label="Excluir ${titulo}">${TRASH_ICON}</button>
         </div>
       </div>
     </article>
@@ -82,7 +89,7 @@ function render() {
     const q = state.nome.toLowerCase();
     lista = lista.filter(b => b.titulo.toLowerCase().includes(q) || b.autor.toLowerCase().includes(q));
   }
-  if (state.genero) lista = lista.filter(b => b.generos.includes(state.genero));
+  if (state.genero) lista = lista.filter(b => bookGeneros(b).includes(state.genero));
   if (state.conservacao) lista = lista.filter(b => b.estadoConservacao === state.conservacao);
   if (state.origem) lista = lista.filter(b => b.nacionalidade === state.origem);
 
