@@ -456,3 +456,32 @@ html[data-theme="light"] .hero-copy .eyebrow {
     padding: 40px 20px;
   }
 }
+
+@media (max-width: 380px) {
+  .hero {
+    padding-top: calc(var(--header-h) + 14px);
+    padding-bottom: 36px;
+  }
+  .hero-copy .eyebrow {
+    max-width: 100%;
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-actions .btn-lg {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+  }
+  .hero-illustration img,
+  .hero-logomarca {
+    max-width: 160px;
+  }
+  .carousel-track > .book-card {
+    flex: 0 0 min(260px, 80vw);
+    min-width: 210px;
+  }
+}

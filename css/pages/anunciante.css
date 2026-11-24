@@ -102,9 +102,14 @@
   .sl-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 24px; }
 }
 @media (max-width: 560px) {
-  .sl-header { flex-direction: column; text-align: center; gap: 18px; padding: 26px 20px; border-radius: 24px; }
-  .sl-stats { justify-content: center; }
-  .sl-books { margin-top: 36px; }
+  .sl-header { flex-direction: column; text-align: center; gap: 16px; padding: 24px 16px; border-radius: 22px; }
+  .sl-avatar { width: 96px; height: 96px; }
+  .sl-name { font-size: clamp(1.45rem, 6vw, 2rem); overflow-wrap: anywhere; }
+  .sl-stats { justify-content: center; gap: 10px 20px; }
+  .sl-books { margin-top: 32px; }
   .sl-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 100%; margin: 0; }
-  .sl-reviews { margin-top: 36px; padding: 22px 18px 26px; border-radius: 24px; }
+  .sl-reviews { margin-top: 32px; padding: 20px 16px 24px; border-radius: 22px; }
+}
+@media (max-width: 360px) {
+  .sl-grid { grid-template-columns: 1fr; gap: 16px; }
 }
