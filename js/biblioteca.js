@@ -3,6 +3,7 @@ import { getAllBooks, getOwnerInfo, authReady } from './storage.js';
 import { renderNavbar, renderFooter } from './navbar.js';
 import { ESTADOS_BR, NOMES_ESTADOS } from './auth.js';
 import { bookCardHTML, bindBookCardEvents, initRevealAnimations } from './book-card.js';
+import { renderExpandableGenreChips } from './genre-filter.js';
 
 await authReady;
 renderNavbar('biblioteca.html');
@@ -27,21 +28,28 @@ const state = {
 
 if (state.nome) document.getElementById('fNome').value = state.nome;
 
+function selectFilterChip(container, chip, stateKey) {
+  const value = chip.dataset.value;
+  const isActive = state[stateKey] === value;
+  container.querySelectorAll('.filter-chip[data-value]').forEach(c => c.classList.remove('active'));
+  state[stateKey] = isActive ? null : value;
+  if (!isActive) chip.classList.add('active');
+  applyFilters();
+}
+
 // Renderiza chips de filtro
 function renderChips(container, values, stateKey) {
   container.innerHTML = values.map(v => `<button class="filter-chip" data-value="${v}">${v}</button>`).join('');
   container.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const value = chip.dataset.value;
-      const isActive = state[stateKey] === value;
-      container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      state[stateKey] = isActive ? null : value;
-      if (!isActive) chip.classList.add('active');
-      applyFilters();
-    });
+    chip.addEventListener('click', () => selectFilterChip(container, chip, stateKey));
   });
 }
-renderChips(document.getElementById('fGenero'), GENEROS, 'genero');
+const genreChipsControl = renderExpandableGenreChips(
+  document.getElementById('fGenero'),
+  GENEROS,
+  () => state.genero,
+  (chip, container) => selectFilterChip(container, chip, 'genero'),
+);
 renderChips(document.getElementById('fConservacao'), ESTADOS_CONSERVACAO, 'conservacao');
 
 document.querySelectorAll('#fOrigem .filter-chip').forEach(chip => {
@@ -70,6 +78,7 @@ document.getElementById('clearFilters').addEventListener('click', () => {
   document.getElementById('fNome').value = '';
   estadoSelect.value = '';
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  genreChipsControl.sync();
   applyFilters();
 });
 const filtersBtn = document.getElementById('toggleFilters');

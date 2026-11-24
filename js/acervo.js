@@ -4,6 +4,7 @@ import { renderNavbar, renderFooter, requireLoginModal } from './navbar.js';
 import { PIN_ICON, initRevealAnimations } from './book-card.js';
 import { EDIT_ICON, TRASH_ICON, editarLivroUrl, confirmarExclusaoLivro } from './book-actions.js';
 import { escapeHTML, safeImgUrl } from './validators.js';
+import { renderExpandableGenreChips } from './genre-filter.js';
 
 // "Meu acervo": os livros que o usuário anunciou, com os filtros da Biblioteca.
 // O lápis abre o formulário de anúncio já preenchido (cadastrar-livro.html?editar=id),
@@ -21,20 +22,27 @@ books.sort((a, b) => new Date(b.dataCadastro) - new Date(a.dataCadastro));
 
 const state = { nome: '', genero: null, conservacao: null, origem: null };
 
+function selectFilterChip(container, chip, stateKey) {
+  const isActive = state[stateKey] === chip.dataset.value;
+  container.querySelectorAll('.filter-chip[data-value]').forEach(c => c.classList.remove('active'));
+  state[stateKey] = isActive ? null : chip.dataset.value;
+  if (!isActive) chip.classList.add('active');
+  render();
+}
+
 // Chips de filtro: clicar de novo no chip ativo desmarca.
 function renderChips(container, values, stateKey) {
   container.innerHTML = values.map(v => `<button type="button" class="filter-chip" data-value="${v}">${v}</button>`).join('');
   container.querySelectorAll('.filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const isActive = state[stateKey] === chip.dataset.value;
-      container.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      state[stateKey] = isActive ? null : chip.dataset.value;
-      if (!isActive) chip.classList.add('active');
-      render();
-    });
+    chip.addEventListener('click', () => selectFilterChip(container, chip, stateKey));
   });
 }
-renderChips(document.getElementById('fGenero'), GENEROS, 'genero');
+const genreChipsControl = renderExpandableGenreChips(
+  document.getElementById('fGenero'),
+  GENEROS,
+  () => state.genero,
+  (chip, container) => selectFilterChip(container, chip, 'genero'),
+);
 renderChips(document.getElementById('fConservacao'), ESTADOS_CONSERVACAO, 'conservacao');
 renderChips(document.getElementById('fOrigem'), ['Internacional', 'Nacional'], 'origem');
 
@@ -43,6 +51,7 @@ document.getElementById('clearFilters').addEventListener('click', () => {
   Object.assign(state, { nome: '', genero: null, conservacao: null, origem: null });
   document.getElementById('fNome').value = '';
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  genreChipsControl.sync();
   render();
 });
 const filtersBtn = document.getElementById('toggleFilters');

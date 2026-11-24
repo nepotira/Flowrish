@@ -7,14 +7,41 @@
 .bk-review + .bk-review { margin-top: 22px; }
 .bk-review-head { display: flex; align-items: center; gap: 10px; }
 .bk-review-autor { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.bk-review-autor a { color: inherit; text-decoration: none; }
+.bk-review-autor a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; }
 .bk-review-autor a:hover, .bk-review-autor a:focus-visible { text-decoration: underline; }
-.bk-review-foto { display: flex; flex: none; }
+.bk-review-foto { display: inline-flex; align-items: center; justify-content: center; flex: none; min-width: 44px; min-height: 44px; }
 .bk-review-head img { width: 34px; height: 34px; border-radius: 50%; background: #9C9B6B; object-fit: cover; }
 .bk-review-head strong { font-weight: 400; font-size: 1rem; }
 .bk-review-head .bk-stars { font-size: 0.9rem; }
 .bk-review-text { margin: 8px 0 0 8px; font-size: 1rem; color: var(--text); overflow-wrap: anywhere; }
 .bk-review-meta { margin: 10px 0 0 8px; font-size: 0.82rem; color: var(--text-muted); }
+.bk-review-editado { font-style: italic; opacity: 0.85; }
+.bk-review-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0 8px; }
+.bk-review-acao {
+  min-height: 44px; padding: 8px 18px; border-radius: 9999px;
+  border: 1.5px solid var(--border); background: var(--pill-btn-bg); color: var(--pill-btn-text);
+  font-family: var(--font-body); font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: var(--shadow-3d-btn-secondary); transition: all 0.2s ease;
+}
+.bk-review-acao:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+.bk-review-excluir {
+  color: #FFAAA0;
+  border-color: rgba(223, 126, 105, 0.45);
+  background: rgba(223, 126, 105, 0.14);
+}
+.bk-review-excluir:hover { border-color: var(--danger); color: #FFFFFF; background: var(--danger); }
+[data-theme="light"] .bk-review-excluir,
+html[data-theme="light"] .bk-review-excluir {
+  color: #B83A20;
+  background: rgba(223, 100, 75, 0.1);
+  border-color: rgba(223, 100, 75, 0.35);
+}
+[data-theme="light"] .bk-review-excluir:hover,
+html[data-theme="light"] .bk-review-excluir:hover {
+  color: #FFFFFF;
+  background: var(--danger);
+}
 .bk-review-empty { margin: 0; font-size: 0.95rem; color: var(--text-muted); }
 
 /* Resposta do dono do perfil, embaixo da avaliação */
@@ -22,7 +49,8 @@
 .bk-review-resposta strong { display: block; font-size: 0.9rem; color: var(--creme); }
 .bk-review-resposta p { margin: 4px 0 0; font-size: 0.95rem; color: var(--text); overflow-wrap: anywhere; }
 .bk-responder {
-  margin: 10px 0 0 8px; padding: 6px 20px; border: none; border-radius: 9999px;
+  margin: 10px 0 0 8px; min-height: 44px; padding: 10px 22px; border: none; border-radius: 9999px;
+  display: inline-flex; align-items: center; justify-content: center;
   background: var(--primary); color: #FFFFFF; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem; cursor: pointer;
   box-shadow: var(--shadow-3d-btn-primary); transition: all 0.2s ease;
 }
@@ -36,6 +64,6 @@
   box-shadow: var(--shadow-clay-input);
 }
 .bk-resposta-form textarea:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
-.bk-resposta-acoes { display: flex; justify-content: flex-end; align-items: center; gap: 14px; }
-.bk-resposta-acoes .bk-responder { margin-left: 0; }
-.bk-resposta-cancelar { margin-top: 10px; padding: 0; border: none; background: none; color: var(--text-muted); font-family: var(--font-body); font-weight: 700; font-size: 0.88rem; text-decoration: underline; cursor: pointer; }
+.bk-resposta-acoes { display: flex; justify-content: flex-end; align-items: center; gap: 14px; margin-top: 10px; }
+.bk-resposta-acoes .bk-responder { margin-left: 0; margin-top: 0; }
+.bk-resposta-cancelar { min-height: 44px; padding: 8px 12px; border: none; background: none; color: var(--text-muted); font-family: var(--font-body); font-weight: 700; font-size: 0.88rem; text-decoration: underline; cursor: pointer; }

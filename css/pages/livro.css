@@ -38,20 +38,27 @@
 
 .bk-fav {
   position: absolute;
-  top: 16px; right: 16px;
+  top: 12px; right: 12px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  border: none;
-  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(53, 54, 32, 0.58);
+  backdrop-filter: blur(4px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--primary);
   cursor: pointer;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
-.bk-fav:hover { transform: scale(1.12); }
-.bk-fav svg { width: 38px; height: 38px; display: block; fill: rgba(53, 54, 32, 0.75); stroke: var(--primary); stroke-width: 2.2; }
+.bk-fav:hover { transform: scale(1.08); }
+.bk-fav svg { width: 28px; height: 28px; display: block; fill: rgba(53, 54, 32, 0.5); stroke: var(--primary); stroke-width: 2.2; }
 .bk-fav.active svg { fill: var(--primary); }
 
-.bk-thumbs { display: flex; gap: 12px; margin-top: 14px; }
+.bk-thumbs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
 .bk-thumbs button {
   width: 60px; height: 80px;
   padding: 0;
@@ -219,7 +226,11 @@
   color: var(--text-muted);
 }
 .bk-avaliar {
-  padding: 8px 22px; border: none; border-radius: var(--radius-pill);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px; border: none; border-radius: var(--radius-pill);
   background: var(--pill-btn-bg);
   border: 1.5px solid var(--border);
   color: var(--pill-btn-text);
@@ -236,11 +247,13 @@
   box-shadow: var(--shadow-clay-card); font-family: var(--font-body);
 }
 .proposta-fechar {
-  position: absolute; top: 18px; right: 20px; padding: 6px; border: none; background: none;
+  position: absolute; top: 10px; right: 12px; width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
+  padding: 0; border: none; background: none;
   color: var(--text-muted); font-size: 1.3rem; line-height: 1; cursor: pointer;
-  transition: color var(--transition-fast);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
 }
-.proposta-fechar:hover { color: var(--primary); }
+.proposta-fechar:hover { color: var(--primary); background: rgba(255, 255, 255, 0.08); }
 .proposta-titulo { margin: 0 30px 10px 0; color: var(--creme); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; line-height: 1.25; }
 .proposta-texto { margin: 0 0 20px; color: var(--text-muted); font-size: 0.96rem; line-height: 1.5; }
 .proposta-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; max-height: 50vh; overflow-y: auto; }
@@ -268,13 +281,15 @@
   box-shadow: var(--shadow-clay-card); font-family: var(--font-body);
 }
 .avaliacao-fechar {
-  position: absolute; top: 18px; right: 20px; padding: 6px; border: none; background: none;
+  position: absolute; top: 10px; right: 12px; width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center; border-radius: 50%;
+  padding: 0; border: none; background: none;
   color: var(--text-muted); font-size: 1.3rem; line-height: 1; cursor: pointer;
 }
-.avaliacao-fechar:hover { color: var(--primary); }
-.avaliacao-titulo { margin: 0 28px 4px; text-align: center; color: var(--creme); font-family: var(--font-heading); font-weight: 700; font-size: 1.45rem; line-height: 1.25; }
+.avaliacao-fechar:hover { color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+.avaliacao-titulo { margin: 0 36px 4px; text-align: center; color: var(--creme); font-family: var(--font-heading); font-weight: 700; font-size: 1.45rem; line-height: 1.25; }
 .avaliacao-estrelas { display: flex; justify-content: center; gap: 6px; margin: 18px 0 24px; }
-.avaliacao-estrelas button { width: 42px; height: 42px; padding: 0; border: none; background: none; cursor: pointer; }
+.avaliacao-estrelas button { width: 44px; height: 44px; padding: 2px; border: none; background: none; cursor: pointer; }
 .avaliacao-estrelas svg { width: 100%; height: 100%; display: block; fill: none; stroke: #F7C531; stroke-width: 1.4; transition: fill 0.12s; }
 .avaliacao-estrelas button.cheia svg { fill: #F7C531; }
 .avaliacao-label { display: block; margin: 0 0 10px 6px; color: var(--creme); font-family: var(--font-body); font-weight: 700; font-size: 0.95rem; }
@@ -296,30 +311,33 @@
   .bk-bottom { margin-left: 0; }
 }
 @media (max-width: 860px) {
-  .bk-main { padding-top: calc(var(--header-h) + 24px); }
-  .bk-top { grid-template-columns: 1fr; }
+  .bk-main { padding-top: calc(var(--header-h) + 24px); padding-bottom: 92px; }
+  .bk-top { grid-template-columns: 1fr; gap: 24px; }
   .bk-gallery { max-width: 300px; width: 100%; margin: 0 auto; }
   .bk-cover { aspect-ratio: 3 / 4; }
   .bk-info { padding-top: 0; }
-  .bk-author { margin-left: 0; font-size: 1.25rem; }
-  .bk-synopsis { margin-top: 24px; font-size: 1rem; }
+  .bk-title { font-size: clamp(1.65rem, 6vw, 2.35rem); }
+  .bk-author { margin-left: 0; font-size: 1.2rem; }
+  .bk-synopsis { margin-top: 20px; font-size: 1rem; }
   .bk-details { margin-top: 20px; font-size: 0.95rem; }
-  .bk-trocar { width: 100%; }
+  .bk-trocar { width: 100%; min-height: 52px; }
 }
 @media (max-width: 560px) {
+  .bk-main { padding-top: calc(var(--header-h) + 16px); padding-bottom: 88px; }
   .bk-trocar {
-    padding: 14px 24px;
+    padding: 14px 20px;
   }
   .bk-trocar-marca {
-    font-size: 1.45rem;
+    font-size: 1.35rem;
   }
-  .bk-owner { padding: 20px 18px 28px; border-radius: 24px; }
-  .bk-owner-head { flex-wrap: wrap; }
+  .bk-owner { padding: 20px 16px 26px; border-radius: 24px; }
+  .bk-owner-head { flex-wrap: wrap; gap: 10px 14px; }
   .bk-owner-head::after { left: 0; right: 0; }
-  .bk-owner-link h2 { font-size: 1.25rem; }
+  .bk-owner-link { min-height: 44px; min-width: 0; }
+  .bk-owner-link h2 { font-size: 1.2rem; overflow-wrap: anywhere; }
   .modal.proposta-modal,
   .modal.avaliacao-modal {
-    padding: 24px 18px 22px;
+    padding: 24px 16px 22px;
     border-radius: 24px;
   }
 }
@@ -327,6 +345,10 @@
 /* ---------- Suporte a Tema Claro (Light Theme) ---------- */
 [data-theme="light"] .bk-title {
   text-shadow: none;
+}
+[data-theme="light"] .bk-fav {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(67, 68, 42, 0.14);
 }
 [data-theme="light"] .bk-fav svg {
   fill: rgba(255, 255, 255, 0.85);

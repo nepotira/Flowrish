@@ -36,9 +36,15 @@ describe('business domain (data.js)', () => {
     expect(bookGeneros({ generos: null })).toEqual([]);
   });
 
-  it('possui lista de generos e estados de conservacao validos', () => {
+  it('possui lista de generos sem duplicatas com novos generos solicitados e estados de conservacao validos', () => {
     expect(GENEROS).toContain('Romance');
-    expect(GENEROS.length).toBeGreaterThan(5);
+    expect(GENEROS).toContain('Ficção Científica');
+    expect(GENEROS).toContain('Young Adult');
+    expect(GENEROS).toContain('Infantil');
+    expect(GENEROS).toContain('Infantojuvenil');
+    expect(GENEROS).toContain('Drama');
+    expect(GENEROS).toContain('Receitas');
+    expect(new Set(GENEROS).size).toBe(GENEROS.length);
     expect(ESTADOS_CONSERVACAO).toEqual(['Novo', 'Seminovo', 'Usado']);
   });
 });

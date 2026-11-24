@@ -140,7 +140,8 @@
 }
 
 .perfil-abas button {
-  padding: 10px 26px;
+  min-height: 44px;
+  padding: 10px 22px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-pill);
   background: var(--surface-card);
@@ -201,6 +202,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  min-height: 44px;
   padding: 10px 20px;
   border: 1.5px solid transparent;
   border-radius: var(--radius-pill);
@@ -254,7 +256,10 @@
 }
 
 .perfil-config-foto label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   margin-bottom: 12px;
   padding: 8px 20px;
   border-radius: var(--radius-pill);
@@ -351,81 +356,123 @@
 }
 
 /* ---------- Celular e Tablet ---------- */
-@media (max-width: 760px) {
+@media (max-width: 768px) {
+  .perfil-corpo {
+    margin: 20px auto 88px;
+  }
   .perfil-topo {
     padding: 24px 20px 20px;
-    margin: calc(var(--header-h) + 16px) 16px 0;
+    margin: calc(var(--header-h) + 14px) 16px 0;
     border-radius: 24px;
   }
   .perfil-topo-inner {
     flex-direction: column;
     text-align: center;
-    gap: 16px;
+    gap: 12px;
   }
   .perfil-foto {
-    width: 100px;
-    height: 100px;
+    width: 96px;
+    height: 96px;
+  }
+  .perfil-nome {
+    font-size: clamp(1.35rem, 5.5vw, 2rem);
+    overflow-wrap: anywhere;
   }
   .perfil-bio {
-    margin: 10px auto 0;
+    margin: 8px auto 0;
   }
   .perfil-numeros {
+    margin-top: 16px;
+    padding-top: 14px;
     justify-content: center;
-    gap: 12px 24px;
-    font-size: 0.95rem;
-  }
-  .perfil-corpo {
-    margin: 24px auto 60px;
+    gap: 10px 20px;
+    font-size: 0.94rem;
   }
   .perfil-abas {
     flex-wrap: wrap;
     gap: 8px;
     padding-bottom: 10px;
+    margin-bottom: 20px;
     justify-content: flex-start;
     max-width: 100%;
   }
   .perfil-abas button {
     flex: 0 0 auto;
-    padding: 8px 16px;
+    min-height: 44px;
+    padding: 10px 16px;
     font-size: 0.9rem;
   }
   .perfil-avaliacoes {
-    padding: 24px 18px;
-    border-radius: 24px;
+    padding: 22px 16px;
+    border-radius: 22px;
   }
   .perfil-config {
     grid-template-columns: 1fr;
-    padding: 24px 20px;
-    border-radius: 24px;
-    gap: 20px;
+    padding: 22px 16px;
+    border-radius: 22px;
+    gap: 18px;
   }
   .perfil-config-menu {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 0 0 16px;
+    padding: 0 0 14px;
     border-right: none;
     border-bottom: 1.5px solid var(--border);
   }
   .perfil-config-menu button {
     font-size: 0.9rem;
-    padding: 6px 14px;
+    min-height: 44px;
+    padding: 8px 14px;
   }
   .perfil-config-form {
     padding: 0;
+    min-width: 0;
   }
   .perfil-config-foto {
     gap: 16px;
+    align-items: center;
   }
   .perfil-config-foto img {
-    width: 88px;
-    height: 88px;
+    width: 80px;
+    height: 80px;
   }
   .perfil-config-local {
     grid-template-columns: 1fr 96px;
     gap: 10px;
   }
+  .perfil-config-local > * {
+    min-width: 0;
+  }
   .perfil-salvar {
     width: 100%;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-topo {
+    margin: calc(var(--header-h) + 10px) 12px 0;
+    padding: 18px 14px 14px;
+    border-radius: 20px;
+  }
+  .perfil-foto {
+    width: 82px;
+    height: 82px;
+  }
+  .perfil-corpo {
+    padding: 0 12px;
+  }
+  .perfil-abas button {
+    flex: 1 1 auto;
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .perfil-config-local {
+    grid-template-columns: 1fr;
   }
 }

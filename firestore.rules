@@ -30,8 +30,8 @@ service cloud.firestore {
 
     // Avaliações de perfil: leitura pública. Quem está logado avalia outro
     // usuário (nunca a si mesmo) com nota de 1 a 5 e comentário opcional; o id
-    // "avaliado_autor" garante uma avaliação por pessoa, que não é editada
-    // (o autor só a apaga, ao excluir a conta). O dono do perfil avaliado
+    // "avaliado_autor" garante uma avaliação por pessoa. O autor pode editar
+    // nota/comentário ou excluir a própria avaliação. O dono do perfil avaliado
     // responde uma vez: só ele grava "resposta" e "respostaEm", e só se ainda
     // não houver resposta.
     match /ratings/{ratingId} {
@@ -45,12 +45,18 @@ service cloud.firestore {
         r().nota is int && r().nota >= 1 && r().nota <= 5 &&
         r().comentario is string && r().comentario.size() <= 500 &&
         exists(/databases/$(database)/documents/users/$(r().avaliadoId));
-      allow update: if request.auth != null &&
-        resource.data.avaliadoId == request.auth.uid &&
-        !('resposta' in resource.data) &&
-        mudou().hasOnly(['resposta', 'respostaEm']) &&
-        r().resposta is string && r().resposta.size() > 0 && r().resposta.size() <= 500 &&
-        r().respostaEm is string;
+      allow update: if request.auth != null && (
+        (resource.data.avaliadoId == request.auth.uid &&
+         !('resposta' in resource.data) &&
+         mudou().hasOnly(['resposta', 'respostaEm']) &&
+         r().resposta is string && r().resposta.size() > 0 && r().resposta.size() <= 500 &&
+         r().respostaEm is string) ||
+        (resource.data.autorId == request.auth.uid &&
+         mudou().hasOnly(['nota', 'comentario', 'editadoEm']) &&
+         r().nota is int && r().nota >= 1 && r().nota <= 5 &&
+         r().comentario is string && r().comentario.size() <= 500 &&
+         r().editadoEm is string && r().editadoEm.size() > 0)
+      );
       allow delete: if request.auth != null && resource.data.autorId == request.auth.uid;
     }
 
