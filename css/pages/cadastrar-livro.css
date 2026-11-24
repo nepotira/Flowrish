@@ -59,6 +59,8 @@
 
 .anunciar-input {
   width: 100%;
+  min-width: 0;
+  min-height: 48px;
   height: 48px;
   border: 1.5px solid var(--border);
   border-radius: var(--radius-pill);
@@ -117,12 +119,16 @@
 
 .a-field {
   margin-bottom: 22px;
+  min-width: 0;
 }
 
 .a-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0 22px;
+}
+.a-row > * {
+  min-width: 0;
 }
 
 .anunciar-divider {
@@ -135,6 +141,8 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
+  min-height: 44px;
+  padding: 6px 0;
   margin: 4px 0 0 4px;
   font-family: var(--font-body);
   font-size: 0.96rem;
@@ -146,8 +154,9 @@
 .anunciar-check input {
   appearance: none;
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
   margin: 0;
   border-radius: 6px;
   border: 1.5px solid var(--border);
@@ -167,9 +176,16 @@
 
 .anunciar-check input:checked::after {
   content: '✓';
+  position: static;
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  transform: none;
   color: #FFFFFF;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 800;
+  line-height: 1;
 }
 
 .anunciar-check input:focus-visible {
@@ -325,19 +341,24 @@
 
 .photo-slot .remove-photo {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 26px;
-  height: 26px;
+  top: 4px;
+  right: 4px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.72);
   color: #fff;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   cursor: pointer;
+}
+.photo-slot .remove-photo::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
 }
 
 .photo-add {
@@ -401,15 +422,34 @@
   box-shadow: 0 0 0 3px rgba(223, 148, 157, 0.4);
 }
 
+@media (max-width: 768px) {
+  .form-page {
+    padding-bottom: calc(var(--bottom-nav-h, 68px) + var(--sab, 0px) + 32px);
+  }
+  .anunciar-card .custom-select-option {
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+  .anunciar-card .custom-select-option input {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 @media (max-width: 640px) {
   .form-page {
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-bottom: 80px;
+    padding-top: calc(var(--header-h) + 20px);
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: calc(var(--bottom-nav-h, 68px) + var(--sab, 0px) + 32px);
+  }
+  .anunciar-title {
+    font-size: clamp(1.75rem, 6.5vw, 2.2rem);
+    margin-bottom: 20px;
   }
   .anunciar-card {
-    padding: 24px 18px 22px;
-    border-radius: 24px;
+    padding: 22px 16px 20px;
+    border-radius: 22px;
   }
   .a-row {
     grid-template-columns: 1fr;
@@ -419,6 +459,12 @@
     align-items: stretch;
     gap: 10px;
   }
+  .isbn-lookup .anunciar-input {
+    flex: none;
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+  }
   .isbn-lookup button {
     width: 100%;
     height: 48px;
@@ -426,6 +472,10 @@
   .anunciar-card .custom-select-trigger {
     width: 100%;
     min-width: 0;
+  }
+  .photo-upload-grid {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    gap: 10px;
   }
   .photo-add {
     min-height: 108px;
@@ -435,7 +485,7 @@
   .anunciar-submit {
     width: 100%;
     height: 50px;
-    font-size: 1.15rem;
+    font-size: 1.12rem;
   }
 }
 

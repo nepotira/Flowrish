@@ -5,7 +5,8 @@
 export const GENEROS = [
   'Romance', 'Ficção Científica', 'Fantasia', 'Suspense', 'Terror',
   'Biografia', 'Autoajuda', 'História', 'Poesia', 'Infantil',
-  'Young Adult', 'Clássicos', 'Quadrinhos/HQ', 'Negócios', 'Filosofia'
+  'Infantojuvenil', 'Young Adult', 'Drama', 'Clássicos', 'Quadrinhos/HQ',
+  'Negócios', 'Filosofia', 'Receitas'
 ];
 
 export const ESTADOS_CONSERVACAO = ['Novo', 'Seminovo', 'Usado'];
