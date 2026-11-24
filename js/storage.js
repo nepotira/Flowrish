@@ -310,7 +310,7 @@ export async function getBooksByOwner(ownerId) {
 // -------- Avaliações --------
 // Qualquer pessoa logada avalia o perfil de outra (não o próprio), com nota de
 // 1 a 5 e comentário opcional. O id é "avaliado_autor": cada um avalia um
-// perfil uma única vez (as regras não deixam regravar).
+// perfil uma vez, podendo editar nota/comentário ou excluir depois.
 const avaliacaoRef = (avaliadoId) => doc(db, 'ratings', `${avaliadoId}_${cachedUser.uid}`);
 
 export async function saveRating(avaliadoId, { nota, comentario }) {
@@ -319,6 +319,19 @@ export async function saveRating(avaliadoId, { nota, comentario }) {
   await setDoc(avaliacaoRef(avaliadoId), {
     avaliadoId, autorId: cachedUser.uid, nota, comentario, criadoEm: new Date().toISOString(),
   });
+}
+
+export async function updateRating(avaliadoId, { nota, comentario }) {
+  if (!cachedUser) throw new Error('Entre na sua conta para editar sua avaliação.');
+  if (avaliadoId === cachedUser.uid) throw new Error('Ação inválida.');
+  await updateDoc(avaliacaoRef(avaliadoId), {
+    nota, comentario, editadoEm: new Date().toISOString(),
+  });
+}
+
+export async function deleteRating(avaliadoId) {
+  if (!cachedUser) throw new Error('Entre na sua conta para excluir sua avaliação.');
+  await deleteDoc(avaliacaoRef(avaliadoId));
 }
 
 // O dono do perfil responde uma avaliação recebida, uma vez (as regras só
@@ -341,6 +354,7 @@ export async function getPublicReviews(userId) {
     nota: r.nota,
     comentario: r.comentario,
     data: r.criadoEm,
+    editadoEm: r.editadoEm || '',
     resposta: r.resposta || '',
     respostaEm: r.respostaEm || '',
   })));

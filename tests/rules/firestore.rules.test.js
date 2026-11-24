@@ -122,17 +122,20 @@ describe('avaliações de perfil (ratings)', () => {
     await assertFails(setDoc(ref, avaliacao({ extra: 1 })));
     await assertFails(setDoc(doc(dbAs(LORRANY), 'ratings', `fantasma_${LORRANY}`), avaliacao({ avaliadoId: 'fantasma' })));
   });
-  it('o dono do perfil responde uma vez; ninguém mais responde nem mexe na nota', async () => {
+  it('o dono do perfil responde uma vez; autor edita sua avaliação mas ninguém mexe nos outros campos', async () => {
     await assertSucceeds(setDoc(doc(dbAs(LORRANY), 'ratings', id), avaliacao()));
     await assertFails(updateDoc(doc(dbAs(LORRANY), 'ratings', id), { resposta: 'eu mesma', respostaEm: 'agora' }));
+    await assertFails(updateDoc(doc(dbAs(LORRANY), 'ratings', id), { nota: 6, editadoEm: 'agora' }));
+    await assertSucceeds(updateDoc(doc(dbAs(LORRANY), 'ratings', id), { nota: 4, comentario: 'Editado!', editadoEm: 'agora' }));
     await assertFails(updateDoc(doc(dbAs(ARTHUR), 'ratings', id), { nota: 1 }));
     await assertFails(updateDoc(doc(dbAs(ARTHUR), 'ratings', id), { resposta: '', respostaEm: 'agora' }));
     await assertFails(updateDoc(doc(dbAs(ARTHUR), 'ratings', id), { resposta: 'a'.repeat(501), respostaEm: 'agora' }));
     await assertSucceeds(updateDoc(doc(dbAs(ARTHUR), 'ratings', id), { resposta: 'Obrigado!', respostaEm: 'agora' }));
     await assertFails(updateDoc(doc(dbAs(ARTHUR), 'ratings', id), { resposta: 'Mudei de ideia', respostaEm: 'depois' }));
   });
-  it('ninguém apaga a avaliação de outra pessoa', async () => {
+  it('só o próprio autor apaga a própria avaliação; outra pessoa não apaga', async () => {
     await assertSucceeds(setDoc(doc(dbAs(LORRANY), 'ratings', id), avaliacao()));
     await assertFails(deleteDoc(doc(dbAs(ARTHUR), 'ratings', id)));
+    await assertSucceeds(deleteDoc(doc(dbAs(LORRANY), 'ratings', id)));
   });
 });

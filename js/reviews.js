@@ -1,12 +1,12 @@
-import { getPublicReviews, saveRating, replyRating, getSession, isLoggedIn } from './storage.js';
+import { getPublicReviews, saveRating, updateRating, deleteRating, replyRating, getSession, isLoggedIn } from './storage.js';
 import { openModal } from './modal.js';
 import { showToast } from './toast.js';
 import { escapeHTML, safeImgUrl } from './validators.js';
 
 // Avaliações de perfil no painel oliva (página do livro e perfil do anunciante).
-// Qualquer pessoa logada avalia o perfil de outra uma única vez: nota de 1 a 5
-// e comentário. Depois de enviada, a avaliação não é editada. O dono do perfil
-// responde cada avaliação uma vez; a resposta aparece embaixo dela.
+// Qualquer pessoa logada avalia o perfil de outra uma vez: nota de 1 a 5 e
+// comentário, podendo editar ou excluir a própria avaliação depois. O dono do
+// perfil avaliado responde cada avaliação uma vez; a resposta aparece abaixo dela.
 // A seção da página traz os espaços [data-score] (um ou mais), [data-reviews]
 // e [data-avaliar]; renderAvaliacoes preenche e liga o botão.
 
@@ -42,9 +42,15 @@ function respostaHTML(r, owner, souDono) {
   return souDono ? `<button type="button" class="bk-responder" data-responder>Responder</button>` : '';
 }
 
-function reviewsHTML(reviews, owner, souDono) {
+function reviewsHTML(reviews, owner, souDono, meuUid) {
   if (!reviews.length) return '<p class="bk-review-empty">Este perfil ainda não recebeu avaliações.</p>';
-  return reviews.map(r => `
+  return reviews.map(r => {
+    const minha = !!meuUid && r.autorId === meuUid;
+    const dataTxt = new Date(r.data).toLocaleDateString('pt-BR');
+    const editadoTxt = r.editadoEm
+      ? ` <span class="bk-review-editado">(editado em ${new Date(r.editadoEm).toLocaleDateString('pt-BR')})</span>`
+      : '';
+    return `
     <article class="bk-review" data-autor="${escapeHTML(r.autorId)}">
       <div class="bk-review-head">
         <a class="bk-review-foto" href="anunciante.html?id=${encodeURIComponent(r.autorId)}" aria-hidden="true" tabindex="-1"><img src="${escapeHTML(safeImgUrl(r.autor.foto, 'assets/default-avatar.svg'))}" alt=""></a>
@@ -54,25 +60,35 @@ function reviewsHTML(reviews, owner, souDono) {
         </span>
       </div>
       ${r.comentario ? `<p class="bk-review-text">${escapeHTML(r.comentario)}</p>` : ''}
-      <p class="bk-review-meta">${new Date(r.data).toLocaleDateString('pt-BR')}</p>
+      <p class="bk-review-meta">${dataTxt}${editadoTxt}</p>
+      ${minha ? `<div class="bk-review-actions">
+        <button type="button" class="bk-review-acao bk-review-editar" data-editar-avaliacao>Editar</button>
+        <button type="button" class="bk-review-acao bk-review-excluir" data-excluir-avaliacao>Excluir</button>
+      </div>` : ''}
       ${respostaHTML(r, owner, souDono)}
-    </article>
-  `).join('');
+    </article>`;
+  }).join('');
 }
 
 export async function renderAvaliacoes(section, owner) {
   const reviews = await getPublicReviews(owner.id).catch(() => []);
-  const minha = reviews.find(r => r.autorId === getSession()?.id);
+  const meuUid = getSession()?.id;
+  const minha = reviews.find(r => r.autorId === meuUid);
   section.querySelectorAll('[data-score]').forEach(el => { el.innerHTML = scoreHTML(reviews); });
-  const souDono = owner.id === getSession()?.id;
+  const souDono = owner.id === meuUid;
   const lista = section.querySelector('[data-reviews]');
-  lista.innerHTML = reviewsHTML(reviews, owner, souDono);
+  lista.innerHTML = reviewsHTML(reviews, owner, souDono, meuUid);
   if (souDono) ligarRespostas(lista, () => renderAvaliacoes(section, owner));
+  if (minha) {
+    const recarregar = () => renderAvaliacoes(section, owner);
+    lista.querySelector('[data-editar-avaliacao]')?.addEventListener('click', () => openRatingModal(owner, recarregar, minha));
+    lista.querySelector('[data-excluir-avaliacao]')?.addEventListener('click', () => confirmarExclusaoAvaliacao(owner, recarregar));
+  }
 
   const btn = section.querySelector('[data-avaliar]');
   if (!btn) return reviews; // perfil do próprio usuário: só leitura
-  // O próprio perfil não se avalia, e quem já avaliou não avalia de novo.
-  btn.hidden = owner.id === getSession()?.id || !!minha;
+  // O próprio perfil não se avalia; quem já avaliou edita ou exclui na própria avaliação.
+  btn.hidden = souDono || !!minha;
   btn.onclick = () => {
     if (!isLoggedIn()) { showToast('Entre na sua conta', 'Faça login para avaliar.'); return; }
     openRatingModal(owner, () => renderAvaliacoes(section, owner));
@@ -114,23 +130,54 @@ function ligarRespostas(lista, onDone) {
   }));
 }
 
-function openRatingModal(owner, onDone) {
+function confirmarExclusaoAvaliacao(owner, onDone) {
+  openModal(`
+    <h3 id="excluirAvaliacaoTitle" class="confirmar-titulo">Tem certeza que deseja excluir sua avaliação?</h3>
+    <p class="confirmar-texto">A nota e o comentário serão removidos deste perfil.</p>
+    <div class="confirmar-acoes">
+      <button type="button" class="confirmar-nao" data-modal-close>Não</button>
+      <button type="button" class="confirmar-sim" id="confirmExcluirAvaliacao">Sim</button>
+    </div>
+  `, { labelledBy: 'excluirAvaliacaoTitle', className: 'confirmar-modal', onMount: (overlay, close) => {
+    const btn = overlay.querySelector('#confirmExcluirAvaliacao');
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      try {
+        await deleteRating(owner.id);
+        close();
+        showToast('Avaliação excluída!');
+        onDone?.();
+      } catch (err) {
+        showToast('Não foi possível excluir', err.message || 'Tente novamente em instantes.');
+        btn.disabled = false;
+      }
+    });
+  }});
+}
+
+function openRatingModal(owner, onDone, existing = null) {
+  const editando = !!existing;
+  const firstName = escapeHTML(owner.nome.split(' ')[0]);
   openModal(`
     <button type="button" class="avaliacao-fechar" data-modal-close aria-label="Fechar">✕</button>
-    <h3 id="ratingTitle" class="avaliacao-titulo">Como você avalia ${escapeHTML(owner.nome.split(' ')[0])}?</h3>
+    <h3 id="ratingTitle" class="avaliacao-titulo">${editando ? `Editar avaliação de ${firstName}` : `Como você avalia ${firstName}?`}</h3>
     <form id="ratingForm">
       <div class="avaliacao-estrelas" role="radiogroup" aria-label="Nota">
         ${[1, 2, 3, 4, 5].map(n => `<button type="button" role="radio" aria-checked="false" aria-label="${n} estrela${n > 1 ? 's' : ''}" data-n="${n}">${ICONE_ESTRELA}</button>`).join('')}
       </div>
       <label class="avaliacao-label" for="ratingComment">Deixe um comentário :)</label>
       <textarea class="avaliacao-comentario" id="ratingComment" rows="4" maxlength="500" placeholder="Ex: Combinou tudo certinho pelo WhatsApp"></textarea>
-      <button type="submit" class="avaliacao-enviar">Enviar avaliação</button>
+      <button type="submit" class="avaliacao-enviar">${editando ? 'Salvar alterações' : 'Enviar avaliação'}</button>
     </form>
   `, { labelledBy: 'ratingTitle', className: 'avaliacao-modal', onMount: (overlay, close) => {
-    let nota = 0;
+    let nota = existing ? Number(existing.nota) || 0 : 0;
     const estrelas = [...overlay.querySelectorAll('.avaliacao-estrelas button')];
     const pintar = (n) => estrelas.forEach(b => b.classList.toggle('cheia', Number(b.dataset.n) <= n));
     const marcar = () => estrelas.forEach(b => b.setAttribute('aria-checked', String(Number(b.dataset.n) === nota)));
+    if (existing?.comentario) overlay.querySelector('#ratingComment').value = existing.comentario;
+    pintar(nota);
+    marcar();
+
     estrelas.forEach(btn => {
       btn.addEventListener('click', () => { nota = Number(btn.dataset.n); marcar(); pintar(nota); });
       btn.addEventListener('mouseenter', () => pintar(Number(btn.dataset.n)));
@@ -143,9 +190,11 @@ function openRatingModal(owner, onDone) {
       const submitBtn = e.target.querySelector('button[type=submit]');
       submitBtn.disabled = true;
       try {
-        await saveRating(owner.id, { nota, comentario: overlay.querySelector('#ratingComment').value.trim() });
+        const payload = { nota, comentario: overlay.querySelector('#ratingComment').value.trim() };
+        if (editando) await updateRating(owner.id, payload);
+        else await saveRating(owner.id, payload);
         close();
-        showToast('Avaliação enviada!');
+        showToast(editando ? 'Avaliação atualizada!' : 'Avaliação enviada!');
         onDone?.();
       } catch (err) {
         showToast('Não foi possível avaliar', err.message || 'Tente novamente em instantes.');
