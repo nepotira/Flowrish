@@ -37,13 +37,21 @@ describe('business domain (data.js)', () => {
   });
 
   it('possui lista de generos sem duplicatas com novos generos solicitados e estados de conservacao validos', () => {
-    expect(GENEROS).toContain('Romance');
-    expect(GENEROS).toContain('Ficção Científica');
-    expect(GENEROS).toContain('Young Adult');
-    expect(GENEROS).toContain('Infantil');
-    expect(GENEROS).toContain('Infantojuvenil');
-    expect(GENEROS).toContain('Drama');
-    expect(GENEROS).toContain('Receitas');
+    const esperados = [
+      'Romance', 'Ficção Científica', 'Fantasia', 'Suspense', 'Terror',
+      'Biografia', 'Autoajuda', 'História', 'Poesia', 'Infantil',
+      'Infantojuvenil', 'Young Adult', 'Drama', 'Clássicos', 'Quadrinhos/HQ',
+      'Negócios', 'Filosofia', 'Receitas',
+      'Romantasia', 'Distopia', 'Thriller Psicológico', 'Mistério e Policial',
+      'Ficção Histórica', 'Romance de Época', 'Ação e Aventura',
+      'Ficção Contemporânea', 'Ficção Literária', 'Realismo Mágico',
+      'Dark Romance', 'Ficção Erótica', 'Cozy Mystery (Mistério Aconchegante)',
+      'Faroeste (Western)', 'Sátira e Humor', 'Novo Adulto (New Adult / NA)',
+      'Mangá', 'Contos e Antologias', 'Crônicas', 'Memórias (Memoir)',
+      'True Crime (Crimes Reais)', 'Espiritualidade e Religião',
+    ];
+    for (const g of esperados) expect(GENEROS).toContain(g);
+    expect(GENEROS.length).toBe(40);
     expect(new Set(GENEROS).size).toBe(GENEROS.length);
     expect(ESTADOS_CONSERVACAO).toEqual(['Novo', 'Seminovo', 'Usado']);
   });

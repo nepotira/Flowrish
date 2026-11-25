@@ -6,7 +6,14 @@ export const GENEROS = [
   'Romance', 'Ficção Científica', 'Fantasia', 'Suspense', 'Terror',
   'Biografia', 'Autoajuda', 'História', 'Poesia', 'Infantil',
   'Infantojuvenil', 'Young Adult', 'Drama', 'Clássicos', 'Quadrinhos/HQ',
-  'Negócios', 'Filosofia', 'Receitas'
+  'Negócios', 'Filosofia', 'Receitas',
+  'Romantasia', 'Distopia', 'Thriller Psicológico', 'Mistério e Policial',
+  'Ficção Histórica', 'Romance de Época', 'Ação e Aventura',
+  'Ficção Contemporânea', 'Ficção Literária', 'Realismo Mágico',
+  'Dark Romance', 'Ficção Erótica', 'Cozy Mystery (Mistério Aconchegante)',
+  'Faroeste (Western)', 'Sátira e Humor', 'Novo Adulto (New Adult / NA)',
+  'Mangá', 'Contos e Antologias', 'Crônicas', 'Memórias (Memoir)',
+  'True Crime (Crimes Reais)', 'Espiritualidade e Religião'
 ];
 
 export const ESTADOS_CONSERVACAO = ['Novo', 'Seminovo', 'Usado'];
